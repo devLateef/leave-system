@@ -26,38 +26,39 @@
                         <div class="col-12 col-md-12 col-lg-12">
                             <div class="card">
                                 <div class="card-body">
-                                    <div class="row">
-                                        <div class="form-group col-md-6 col-12">
-                                            <dd>Leave Type</dd>
-                                            <dl>{{$leave->leave_type}}</dl>
+                                    <dl>
+                                        <div class="row">
+                                            <div class="form-group col-md-6 col-12">
+                                                <dt>Leave Type</dt>
+                                                <dd>{{$leave->leave_type}}</dd>
+                                            </div>
+                                            <div class="form-group col-md-6 col-12">
+                                                <dt>Department</dt>
+                                                <dd>{{$leave->department}}</dd>
+                                            </div>
                                         </div>
-                                        <div class="form-group col-md-6 col-12">
-                                            <dd>Department</dd>
-                                            <dl>{{$leave->department}}</dl>
+                                        <div class="row">
+                                            <div class="form-group col-md-6 col-12">
+                                                <dt>Expected Start Date</dt>
+                                                <dd>{{$leave->start_date}}</dd>
+                                            </div>
+                                            <div class="form-group col-md-6 col-12">
+                                                <dt>Expected End Date</dt>
+                                                <dd>{{$leave->end_date}}</dd>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="form-group col-md-6 col-12">
-                                            <dd>Expected Start Date</dd>
-                                            <dl>{{$leave->start_date}}</dl>
+                                        <div class="row">
+                                            <div class="form-group col-md-6 col-12">
+                                                <dt>Comment</dt>
+                                                <dd>{{$leave->comment}}</dd>
+                                            </div>
+                                            <div class="form-group col-md-6 col-12">
+                                                <dd>Current Status</dd>
+                                                <dl>{{$leave->status}}</dl>
+                                            </div>
                                         </div>
-                                        <div class="form-group col-md-6 col-12">
-                                            <dd>Expected End Date</dd>
-                                            <dl>{{$leave->end_date}}</dl>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="form-group col-md-6 col-12">
-                                            <dd>Comment</dd>
-                                            <dl>{{$leave->comment}}</dl>
-                                        </div>
-                                        <div class="form-group col-md-6 col-12">
-                                            <dd>Current Status</dd>
-                                            <dl>{{$leave->status}}</dl>
-                                        </div>
-                                    </div>
+                                    </dl>
                                     <div class="d-lg-flex d-md-flex justify-content-between">
-
                                         <button type="button"
                                             class="btn btn-primary bg-success mt-2 col-lg-2 col-md-5 col-12"
                                             data-bs-toggle="modal"
@@ -74,8 +75,8 @@
                 </div>
             </section>
             {{-- Approve modal starts here --}}
-            <div class="modal fade" id="approveModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-                aria-hidden="true">
+            <div class="modal fade" id="approveModal" tabindex="-1"
+                aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -89,14 +90,17 @@
                                 <div class="mb-3">
                                     <label for="recipient-name" class="col-form-label">Approve Start
                                         Date:</label>
-                                    <input type="date" class="form-control" id="approved_start_date">
+                                    <input type="date" class="form-control"
+                                        id="approved_start_date">
                                 </div>
                                 <div class="mb-3">
-                                    <label for="recipient-name" class="col-form-label">Approve End Date:</label>
+                                    <label for="recipient-name" class="col-form-label">Approve End
+                                        Date:</label>
                                     <input type="date" class="form-control" id="approved_end_date">
                                 </div>
                                 <div class="mb-3">
-                                    <label for="message-text" class="col-form-label">Message:</label>
+                                    <label for="message-text"
+                                        class="col-form-label">Message:</label>
                                     <textarea class="form-control" id="message-text"></textarea>
                                 </div>
                                 <div class="modal-footer">
@@ -110,10 +114,10 @@
                 </div>
             </div>
             {{-- Approve modal ends here --}}
-            
+
             {{-- Decline modal starts here --}}
-            <div class="modal fade" id="declineModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-                aria-hidden="true">
+            <div class="modal fade" id="declineModal" tabindex="-1"
+                aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
