@@ -66,6 +66,10 @@
                                         <button type="button"
                                             class="btn btn-primary bg-warning mt-2 col-lg-2 col-md-5 col-12"
                                             data-bs-toggle="modal"
+                                            data-bs-target="#declineModal">Defer Request</button>
+                                        <button type="button"
+                                            class="btn btn-primary bg-danger mt-2 col-lg-2 col-md-5 col-12"
+                                            data-bs-toggle="modal"
                                             data-bs-target="#declineModal">Decline Request</button>
                                     </div>
                                 </div>
