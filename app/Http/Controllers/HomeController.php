@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Leave;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -26,7 +27,8 @@ class HomeController extends Controller
     public function index()
     {
         $leave_applications = Leave::all();
-        return view('home', compact('leave_applications'));
+        $user_id = Auth::user()->role_id;
+        return view('home', compact('leave_applications', 'user_id'));
     }
 
     public function show()

@@ -29,7 +29,7 @@ class LeavePolicy
      */
     public function create(User $user): bool
     {
-        return $user->is_admin;
+        return $user->role_id == 4;
     }
 
     /**

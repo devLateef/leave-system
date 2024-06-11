@@ -96,7 +96,9 @@
                         <td>{{$leave->end_date}}</td>
                         <td class="text-warning fw-bold">{{$leave->status}}</td>
                         <td>
-                            <a href="{{route('show-leave', $leave->id)}}"><button class="btn btn-primary">Show Details</button></a>
+                            @if($user_id == 4)
+                                <a href="{{route('show-leave', $leave->id)}}"><button class="btn btn-primary">Show Details</button></a>
+                            @endif
                         </td>
                     </tr>
                     @endforeach

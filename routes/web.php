@@ -3,6 +3,8 @@
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LeaveController;
 use Illuminate\Support\Facades\Route;
+use App\Models\Role;
+use App\Models\User;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,6 +26,10 @@ Route::post('/store', [LeaveController::class, 'store'])->name('store');
 Route::get('/show/{leave}', [LeaveController::class, 'show'])->name('show-leave');
 Route::get('/show-profile', [HomeController::class, 'show'])->name('show-profile');
 Route::get('/edit-profile', [HomeController::class, 'edit'])->name('edit-profile');
+// Route::get('/role', function () {
+//     $user = User::find(1)->role;
+//     return $user;
+// });
 
 Auth::routes();
 

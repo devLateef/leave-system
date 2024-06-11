@@ -46,6 +46,7 @@ class LeaveController extends Controller
      */
     public function show(Leave $leave)
     {
+        $this->authorize('create', $leave);
         return view('show-leave', compact('leave'));
     }
 
