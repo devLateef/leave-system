@@ -15,4 +15,8 @@ class Comment extends Model
         "message",
         "reason"
     ];
+
+    public function leave(){
+        return $this->belongsTo(Leave::class);
+    }
 }

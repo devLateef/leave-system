@@ -90,22 +90,23 @@
                                 aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <form method="GET">
+                            <form method="POST" action="{{route('store')}}">
+                                @csrf
                                 <div class="mb-3">
                                     <label for="recipient-name" class="col-form-label">Approve Start
                                         Date:</label>
                                     <input type="date" class="form-control"
-                                        id="approved_start_date">
+                                        id="approved_start_date" name="start_date">
                                 </div>
                                 <div class="mb-3">
                                     <label for="recipient-name" class="col-form-label">Approve End
                                         Date:</label>
-                                    <input type="date" class="form-control" id="approved_end_date">
+                                    <input type="date" class="form-control" id="approved_end_date" name="end_date">
                                 </div>
                                 <div class="mb-3">
                                     <label for="message-text"
                                         class="col-form-label">Message:</label>
-                                    <textarea class="form-control" id="message-text"></textarea>
+                                    <textarea class="form-control" id="message-text" name="message"></textarea>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary bg-danger"
@@ -136,17 +137,17 @@
                                     <label for="recipient-name" class="col-form-label">Defer Start
                                         Date:</label>
                                     <input type="date" class="form-control"
-                                        id="approved_start_date">
+                                        id="approved_start_date" name="start_date">
                                 </div>
                                 <div class="mb-3">
                                     <label for="recipient-name" class="col-form-label">Defer End
                                         Date:</label>
-                                    <input type="date" class="form-control" id="approved_end_date">
+                                    <input type="date" class="form-control" id="approved_end_date" name="end_date">
                                 </div>
                                 <div class="mb-3">
                                     <label for="message-text"
                                         class="col-form-label">Reason:</label>
-                                    <textarea class="form-control" id="message-text"></textarea>
+                                    <textarea class="form-control" id="message-text" name="reason"></textarea>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary bg-danger"
@@ -159,7 +160,6 @@
                 </div>
             </div>
             {{-- Defer modal ends here --}}
-            
             {{-- Decline modal starts here --}}
             <div class="modal fade" id="declineModal" tabindex="-1"
                 aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -175,7 +175,7 @@
                             <form method="GET">
                                 <div class="mb-3">
                                     <label for="message-text" class="col-form-label">Reason:</label>
-                                    <textarea class="form-control" id="message-text"></textarea>
+                                    <textarea class="form-control" id="message-text" name="reason"></textarea>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary bg-danger"

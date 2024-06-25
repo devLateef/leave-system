@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Leave;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class LeaveController extends Controller
 {
@@ -37,8 +38,10 @@ class LeaveController extends Controller
         $new_leave->designation = $request->designation;
         $new_leave->standin_staff = $request->standin_staff;
         $new_leave->comment = $request->comment;
+        $new_leave->user_id = Auth::user()->id;
         $new_leave->save();
         return redirect(route('home'));
+        
     }
 
     /**

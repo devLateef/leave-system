@@ -19,4 +19,12 @@ class Leave extends Model
         'comment',
         'status'
     ];
+
+    public function comment(){
+        return $this->hasOne(Comment::class);
+    }
+    
+    public function users(){
+        return $this->belongsTo(User::class);
+    }
 }

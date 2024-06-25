@@ -96,7 +96,7 @@
                         <td>{{$leave->end_date}}</td>
                         <td class="text-warning fw-bold">{{$leave->status}}</td>
                         <td>
-                            @if($user_id == 4)
+                            @if($is_super_admin == 4)
                                 <a href="{{route('show-leave', $leave->id)}}"><button class="btn btn-primary">Show Details</button></a>
                             @endif
                         </td>
