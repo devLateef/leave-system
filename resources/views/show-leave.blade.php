@@ -66,7 +66,7 @@
                                         <button type="button"
                                             class="btn btn-primary bg-warning mt-2 col-lg-2 col-md-5 col-12"
                                             data-bs-toggle="modal"
-                                            data-bs-target="#declineModal">Defer Request</button>
+                                            data-bs-target="#deferModal">Defer Request</button>
                                         <button type="button"
                                             class="btn btn-primary bg-danger mt-2 col-lg-2 col-md-5 col-12"
                                             data-bs-toggle="modal"
@@ -119,6 +119,47 @@
             </div>
             {{-- Approve modal ends here --}}
 
+            {{-- Defer modal start here --}}
+            <div class="modal fade" id="deferModal" tabindex="-1"
+                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Complete the form
+                                to Defer the Application</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form method="GET">
+                                <div class="mb-3">
+                                    <label for="recipient-name" class="col-form-label">Defer Start
+                                        Date:</label>
+                                    <input type="date" class="form-control"
+                                        id="approved_start_date">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="recipient-name" class="col-form-label">Defer End
+                                        Date:</label>
+                                    <input type="date" class="form-control" id="approved_end_date">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="message-text"
+                                        class="col-form-label">Reason:</label>
+                                    <textarea class="form-control" id="message-text"></textarea>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary bg-danger"
+                                        data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary">Okay</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{-- Defer modal ends here --}}
+            
             {{-- Decline modal starts here --}}
             <div class="modal fade" id="declineModal" tabindex="-1"
                 aria-labelledby="exampleModalLabel" aria-hidden="true">
