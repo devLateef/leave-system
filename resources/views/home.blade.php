@@ -94,7 +94,7 @@
                         <td>{{$leave->leave_type}}</td>
                         <td>{{$leave->start_date}}</td>
                         <td>{{$leave->end_date}}</td>
-                        <td class="text-warning fw-bold">{{$leave->status}}</td>
+                        <td class="fw-bold {{$leave->status == 'Approved' ? 'text-success' : 'text-warning'}}">{{$leave->status}}</td>
                         <td>
                             @if($is_super_admin == 4)
                                 <a href="{{route('show-leave', $leave->id)}}"><button class="btn btn-primary">Show Details</button></a>

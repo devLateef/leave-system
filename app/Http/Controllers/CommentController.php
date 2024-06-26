@@ -31,13 +31,18 @@ class CommentController extends Controller
     public function store(Request $request)
     {
         $new_comment = new Comment();
-        $leave = new Leave();
-        // $new_comment->start_date = $request->start_date;
-        // $new_comment->end_date = $request->end_date;
-        // $new_comment->message = $request->message;
-        // $new_comment->leave_id = Auth::user()->id;
-        // $new_comment->save();
-        return $leave->id;
+        $new_comment->start_date = $request->start_date;
+        $new_comment->end_date = $request->end_date;
+        $new_comment->message = $request->message;
+        $new_comment->leave_id = $request->leave_id;
+        $new_comment->save();
+
+        // Retrieve the associated leave and update its status
+        $leave = Leave::find($request->leave_id);
+        $leave->status = 'Approved';
+        $leave->save();
+        
+        return redirect(route('home'));
     }
 
     /**

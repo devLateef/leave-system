@@ -21,7 +21,7 @@ class Leave extends Model
     ];
 
     public function comment(){
-        return $this->hasOne(Comment::class);
+        return $this->hasMany(Comment::class);
     }
     
     public function users(){

@@ -20,7 +20,7 @@
             </li>
             <li class="nav-item dropdown">
                 <a href="#" class="nav-link has-dropdown text-body" data-toggle="dropdown"><i
-                        class="fa fa-columns"></i>
+                        class="fa fa-user"></i>
                     <span>User Management</span></a>
                 <ul class="dropdown-menu" style="display: none;">
                     <li><a class="nav-link" href="">Add User</a></li>

@@ -19,7 +19,7 @@ return new class extends Migration
             $table->date('end_date');
             $table->foreignId('leave_id')->constrained();
             $table->string('message')->nullable();
-            $table->string('reason');
+            $table->string('reason')->nullable();
             $table->timestamps();
         });
     }

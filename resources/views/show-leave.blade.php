@@ -90,7 +90,7 @@
                                 aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <form method="POST" action="{{route('store')}}">
+                            <form method="POST" action="{{route('approve')}}">
                                 @csrf
                                 <div class="mb-3">
                                     <label for="recipient-name" class="col-form-label">Approve Start
@@ -108,6 +108,7 @@
                                         class="col-form-label">Message:</label>
                                     <textarea class="form-control" id="message-text" name="message"></textarea>
                                 </div>
+                                <input type="number" class="form-control d-none" id="leave_id" value="{{$leave->id}}" name="leave_id">
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary bg-danger"
                                         data-bs-dismiss="modal">Close</button>
