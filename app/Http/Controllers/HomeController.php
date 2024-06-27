@@ -26,9 +26,17 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $leave_applications = Leave::all();
-        $is_super_admin = Auth::user()->role_id;
-        return view('home', compact('leave_applications', 'is_super_admin'));
+        $user = Auth::user();
+        $is_super_admin = Auth::user()->role_id == 4;
+        $is_admin = Auth::user()->role_id == 3;
+        $is_hod = Auth::user()->role_id == 2;
+        if($user == $is_super_admin || $user == $is_admin){
+            $leave_applications = Leave::all();
+        }else{
+            $leave_applications = Leave::where('user_id', $user->id)->get();
+        }
+        
+        return view('home', compact(['leave_applications', 'is_super_admin', 'is_hod']));
     }
 
     public function show()

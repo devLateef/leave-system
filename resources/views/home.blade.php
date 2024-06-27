@@ -98,6 +98,10 @@
                         <td>
                             @if($is_super_admin == 4)
                                 <a href="{{route('show-leave', $leave->id)}}"><button class="btn btn-primary">Show Details</button></a>
+                                @else
+                                <a href="#"><button class="btn btn-primary">Show</button></a>
+                                <a href="#"><button class="btn btn-warning">Edit</button></a>
+                                <a href="#"><button class="btn btn-danger">Delete</button></a>
                             @endif
                         </td>
                     </tr>
