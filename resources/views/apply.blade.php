@@ -21,7 +21,7 @@
                         <form method="POST" action="{{route('store')}}">
                             @csrf
                             <div class="row">
-                                <div class="form-group col-6">
+                                <div class="form-group col-12">
                                     <label>Leave Type</label>
                                     <select class="form-control selectric" name="leave_type">
                                         <option value="0">Select Option</option>
@@ -37,11 +37,6 @@
                                         <option value="Study Leave">Study Leave</option>
                                         <option value="Training Leave">Training Leave</option>
                                     </select>
-                                </div>
-                                <div class="form-group col-6">
-                                    <label for="dept">Department</label>
-                                    <input id="dept" type="text" class="form-control"
-                                        name="department" required>
                                 </div>
                             </div>
                             <div class="row">

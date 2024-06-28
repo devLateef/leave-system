@@ -13,11 +13,11 @@ return new class extends Migration {
         Schema::create('leaves', function (Blueprint $table) {
             $table->id();
             $table->string('leave_type');
-            $table->string('department');
             $table->date('start_date');
             $table->date('end_date');
             $table->string('designation');
-            $table->string('status')->default('Pending');
+            $table->string('hod_approval')->default('Pending');
+            $table->string('final_approval')->default('Pending');
             $table->string('standin_staff')->nullable();
             $table->string('comment')->nullable();
             $table->timestamps();

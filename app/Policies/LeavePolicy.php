@@ -3,6 +3,7 @@
 namespace App\Policies;
 
 use App\Models\Leave;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
@@ -29,7 +30,7 @@ class LeavePolicy
      */
     public function create(User $user): bool
     {
-        return $user->role_id == 4;
+        return $user->role_id == env('SUPER_ADMIN') || $user->role_id == env('ADMIN') || $user->role_id == env('HOD');
     }
 
     /**

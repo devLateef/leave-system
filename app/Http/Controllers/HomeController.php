@@ -27,16 +27,25 @@ class HomeController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $is_super_admin = Auth::user()->role_id == 4;
-        $is_admin = Auth::user()->role_id == 3;
-        $is_hod = Auth::user()->role_id == 2;
-        if($user == $is_super_admin || $user == $is_admin){
-            $leave_applications = Leave::all();
-        }else{
-            $leave_applications = Leave::where('user_id', $user->id)->get();
+        $superAdmin = env('SUPER_ADMIN');
+        $admin = env('ADMIN');
+        $hod = env('HOD');
+        if ($user) {
+            if($user->role_id == $superAdmin || $user->role_id == $admin){
+                $leave_applications = Leave::all();
+            }elseif($user->role_id == $hod){
+                $leave_applications = Leave::whereHas('user', function($query) use ($user) {
+                    $query->where('department', $user->department);
+                })->get();
+            }else{
+                $leave_applications = Leave::where('user_id', $user->id)->get();
+            }
+            
+            return view('home', compact(['leave_applications', 'superAdmin', 'admin', 'hod']));
+        } else {
+            // Handle the case where $user is null
+            return redirect()->route('login')->withErrors('You need to be logged in to view leave applications.');
         }
-        
-        return view('home', compact(['leave_applications', 'is_super_admin', 'is_hod']));
     }
 
     public function show()

@@ -20,7 +20,8 @@
                         <th scope="col">Leave Type</th>
                         <th scope="col">Expected Start Date</th>
                         <th scope="col">Expected End Date</th>
-                        <th scope="col">Status</th>
+                        <th scope="col">HOD Approval</th>
+                        <th scope="col">Final Approval</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -31,12 +32,13 @@
                         <td>{{$leave->leave_type}}</td>
                         <td>{{$leave->start_date}}</td>
                         <td>{{$leave->end_date}}</td>
-                        <td class="text-warning fw-bold">{{$leave->status}}</td>
+                        <td class="text-warning fw-bold">{{$leave->hod_approval}}</td>
+                        <td class="text-warning fw-bold">{{$leave->final_approval}}</td>
                     </tr>
                     @endforeach
                     @else
                     <tr scope="row">
-                        <td colspan="5">No Record Found</td>
+                        <td colspan="6">No Record Found</td>
                     </tr>
                     @endif
                 </tbody>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Comment;
 use App\Models\Leave;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -14,7 +15,7 @@ class LeaveController extends Controller
      */
     public function index()
     {
-        $leave_applications = Leave::all();
+        $leave_applications = Leave::with('user')->get();
         return view('active-request', compact('leave_applications'));
     }
 
@@ -33,7 +34,6 @@ class LeaveController extends Controller
     {
         $new_leave = new Leave();
         $new_leave->leave_type = $request->leave_type;
-        $new_leave->department = $request->department;
         $new_leave->start_date = $request->start_date;
         $new_leave->end_date = $request->end_date;
         $new_leave->designation = $request->designation;

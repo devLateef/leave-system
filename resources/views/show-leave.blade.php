@@ -28,33 +28,45 @@
                                 <div class="card-body">
                                     <dl>
                                         <div class="row">
-                                            <div class="form-group col-md-6 col-12">
+                                            <div class="form-group col-md-4 col-12">
+                                                <dt>Full Name</dt>
+                                                <dd>{{$leave->user->name}}</dd>
+                                            </div>
+                                            <div class="form-group col-md-4 col-12">
                                                 <dt>Leave Type</dt>
                                                 <dd>{{$leave->leave_type}}</dd>
                                             </div>
-                                            <div class="form-group col-md-6 col-12">
+                                            <div class="form-group col-md-4 col-12">
                                                 <dt>Department</dt>
-                                                <dd>{{$leave->department}}</dd>
+                                                @if($leave->user)
+                                                <dd>{{$leave->user->department}}</dd>
+                                                @else
+                                                <dd>No Department Found</dd>
+                                                @endif
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="form-group col-md-6 col-12">
+                                            <div class="form-group col-md-4 col-12">
                                                 <dt>Expected Start Date</dt>
                                                 <dd>{{$leave->start_date}}</dd>
                                             </div>
-                                            <div class="form-group col-md-6 col-12">
+                                            <div class="form-group col-md-4 col-12">
                                                 <dt>Expected End Date</dt>
                                                 <dd>{{$leave->end_date}}</dd>
                                             </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="form-group col-md-6 col-12">
+                                            <div class="form-group col-md-4 col-12">
                                                 <dt>Comment</dt>
                                                 <dd>{{$leave->comment}}</dd>
                                             </div>
-                                            <div class="form-group col-md-6 col-12">
-                                                <dd>Current Status</dd>
-                                                <dl>{{$leave->status}}</dl>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-md-4 col-12">
+                                                <dt>HOD Approval</dt>
+                                                <dd class="fw-bold {{$leave->hod_approval == 'Approved' ? 'text-success' : 'text-warning'}}">{{$leave->hod_approval}}</dd>
+                                            </div>
+                                            <div class="form-group col-md-4 col-12">
+                                                <dt>Final Approval</dt>
+                                                <dd class="fw-bold {{$leave->final_approval == 'Approved' ? 'text-success' : 'text-warning'}}">{{$leave->final_approval}}</dd>
                                             </div>
                                         </div>
                                     </dl>

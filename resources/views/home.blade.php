@@ -82,7 +82,8 @@
                         <th scope="col">Leave Type</th>
                         <th scope="col">Expected Start Date</th>
                         <th scope="col">Expected End Date</th>
-                        <th scope="col">Status</th>
+                        <th scope="col">HOD Approval</th>
+                        <th scope="col">Final Approval</th>
                         <th scope="col">Action</th>
                     </tr>
                 </thead>
@@ -94,21 +95,21 @@
                         <td>{{$leave->leave_type}}</td>
                         <td>{{$leave->start_date}}</td>
                         <td>{{$leave->end_date}}</td>
-                        <td class="fw-bold {{$leave->status == 'Approved' ? 'text-success' : 'text-warning'}}">{{$leave->status}}</td>
+                        <td class="fw-bold {{$leave->hod_approval == 'Approved' ? 'text-success' : 'text-warning'}}">{{$leave->hod_approval}}</td>
+                        <td class="fw-bold {{$leave->final_approval == 'Approved' ? 'text-success' : 'text-warning'}}">{{$leave->final_approval}}</td>
                         <td>
-                            @if($is_super_admin == 4)
-                                <a href="{{route('show-leave', $leave->id)}}"><button class="btn btn-primary">Show Details</button></a>
+                            @if($superAdmin || $admin || $hod)
+                                <a href="{{route('show-leave', $leave->id)}}"><button class="btn btn-primary m-2">Show Details</button></a>
                                 @else
-                                <a href="#"><button class="btn btn-primary">Show</button></a>
-                                <a href="#"><button class="btn btn-warning">Edit</button></a>
-                                <a href="#"><button class="btn btn-danger">Delete</button></a>
+                                <a href="#"><button class="btn btn-primary mb-1 mt-1">Show</button></a>
+                                <a href="#"><button class="btn btn-danger mb-1">Delete</button></a>
                             @endif
                         </td>
                     </tr>
                     @endforeach
                     @else
                     <tr scope="row">
-                        <td colspan="6">No Record Found</td>
+                        <td colspan="7">No Record Found</td>
                     </tr>
                     @endif
                 </tbody>

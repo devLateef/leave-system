@@ -25,34 +25,32 @@ class DatabaseSeeder extends Seeder
         // ]);
         $roles = ['user', 'hod', 'admin', 'super_admin'];
 
-        $users = [
-            [
-                'name' => 'Super Admin',
-                'department' => env('SUPER_ADMIN_DEPARTMENT'),
-                'email' => env('SUPER_ADMIN_EMAIL'),
-                'email_verified_at' => now(),
-                'password' => static::$password ??= Hash::make(env('SUPER_ADMIN_PASSWORD')),
-                'remember_token' => Str::random(10),
-                'role_id' => '4',
-            ],
-            [
-                'name' => env('ADMIN_NAME'),
-                'department' => env('ADMIN_DEPARTMENT'),
-                'email' => env('ADMIN_EMAIL'),
-                'email_verified_at' => now(),
-                'password' => static::$password ??= Hash::make(env('ADMIN_PASSWORD')),
-                'remember_token' => Str::random(10),
-                'role_id' => '3',
-            ],
-        ];
+        // $users = [
+        //     [
+        //         'name' => 'Super Admin',
+        //         'department' => env('SUPER_ADMIN_DEPARTMENT'),
+        //         'email' => env('SUPER_ADMIN_EMAIL'),
+        //         'email_verified_at' => now(),
+        //         'password' => static::$password ??= Hash::make(env('SUPER_ADMIN_PASSWORD')),
+        //         'remember_token' => Str::random(10),
+        //         'role_id' => '4',
+        //     ],
+        //     [
+        //         'name' => env('ADMIN_NAME'),
+        //         'department' => env('ADMIN_DEPARTMENT'),
+        //         'email' => env('ADMIN_EMAIL'),
+        //         'email_verified_at' => now(),
+        //         'password' => static::$password ??= Hash::make(env('ADMIN_PASSWORD')),
+        //         'remember_token' => Str::random(10),
+        //         'role_id' => '3',
+        //     ],
+        // ];
         
         foreach($roles as $role){
             Role::factory()->create(['name' => $role]);
         }
 
-        foreach($users as $user){
-            User::create($user);
-        }
+        User::factory(1)->create();
 
     }
 }

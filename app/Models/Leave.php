@@ -11,20 +11,20 @@ class Leave extends Model
 
     protected $fillable = [
         'leave_type',
-        'department',
         'start_date',
         'end_date',
         'designation',
         'standin_staff',
         'comment',
-        'status'
+        'hod_approval',
+        'final_approval'
     ];
 
     public function comment(){
         return $this->hasMany(Comment::class);
     }
     
-    public function users(){
+    public function user(){
         return $this->belongsTo(User::class);
     }
 }
