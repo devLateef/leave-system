@@ -20,7 +20,7 @@ class Leave extends Model
         'final_approval'
     ];
 
-    public function comment(){
+    public function comments(){
         return $this->hasMany(Comment::class);
     }
     

@@ -13,7 +13,9 @@ class Comment extends Model
         "start_date",
         "end_date",
         "message",
-        "reason"
+        "reason",
+        "leave_id",
+        "user_id"
     ];
 
     public function leave(){

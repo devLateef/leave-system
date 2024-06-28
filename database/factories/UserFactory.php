@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Env;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
@@ -25,12 +26,13 @@ class UserFactory extends Factory
     {
         return [
                 // 'name' => fake()->name(),
-                'name' => 'Admin',
-                'department' => 'Establishment',
+                'name' => env('ADMIN_NAME'),
+                'department' => env('ADMIN_DEPARTMENT'),
+                'role_id' => env('ADMIN'),
                 // 'email' => fake()->unique()->safeEmail(),
-                'email' => 'admin@gmail.com',
+                'email' => env('ADMIN_EMAIL'),
                 'email_verified_at' => now(),
-                'password' => static::$password ??= Hash::make('adminpassword'),
+                'password' => static::$password ??= Hash::make(env('ADMIN_PASSWORD')),
                 'remember_token' => Str::random(10),
 
 

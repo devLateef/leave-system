@@ -30,19 +30,49 @@ class CommentController extends Controller
      */
     public function store(Request $request)
     {
-        $new_comment = new Comment();
-        $new_comment->start_date = $request->start_date;
-        $new_comment->end_date = $request->end_date;
-        $new_comment->message = $request->message;
-        $new_comment->leave_id = $request->leave_id;
-        $new_comment->save();
+        $request->validate([
+            'start_date' => 'required|date',
+            'end_date' => 'required|date',
+        ]);
 
-        // Retrieve the associated leave and update its status
-        $leave = Leave::find($request->leave_id);
-        $leave->status = 'Approved';
-        $leave->save();
+        $user = Auth::user();
+        $existing_comment = Comment::where('user_id', $user->id)
+        ->where('leave_id', $request->leave_id)->first();
+
+        if ($existing_comment) {
+            $existing_comment->start_date = $request->start_date;
+            $existing_comment->end_date = $request->end_date;
+            $existing_comment->message = $request->message;
+            $existing_comment->save();
+        }else{
+            $new_comment = new Comment();
+            $new_comment->start_date = $request->start_date;
+            $new_comment->end_date = $request->end_date;
+            $new_comment->message = $request->message;
+            $new_comment->leave_id = $request->leave_id;
+            $new_comment->user_id = Auth::user()->id;
+            $new_comment->save();
+        }
+
+        // Retrieving the associated leave and updating its status
+        // $leave = Leave::find($request->leave_id);
+        $leave = $new_comment->leave;
+        if($leave){
+            if($user->role_id == env('HOD')){
+                $leave->hod_approval = 'Approved';
+                $leave->save();
+            }elseif($user->role_id == env('ADMIN')){
+                $leave->final_approval = 'Approved';
+                $leave->save();
+            }else{
+                $leave->hod_approval = 'Approved';
+                $leave->final_approval = 'Approved';
+                $leave->save();
+            };
+        };
+        // $leave->save();
         
-        return redirect(route('home'));
+        return redirect(route('home'))->with('success', 'Message saved successfully');
     }
 
     /**

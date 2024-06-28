@@ -98,7 +98,7 @@
                         <td class="fw-bold {{$leave->hod_approval == 'Approved' ? 'text-success' : 'text-warning'}}">{{$leave->hod_approval}}</td>
                         <td class="fw-bold {{$leave->final_approval == 'Approved' ? 'text-success' : 'text-warning'}}">{{$leave->final_approval}}</td>
                         <td>
-                            @if($superAdmin || $admin || $hod)
+                            @if($user->role_id == $superAdmin || $user->role_id == $admin || $user->role_id == $hod)
                                 <a href="{{route('show-leave', $leave->id)}}"><button class="btn btn-primary m-2">Show Details</button></a>
                                 @else
                                 <a href="#"><button class="btn btn-primary mb-1 mt-1">Show</button></a>
@@ -113,7 +113,7 @@
                     </tr>
                     @endif
                 </tbody>
-            </table>
+            </table>         
         </div>
         @include('layouts.footer')
     </div>

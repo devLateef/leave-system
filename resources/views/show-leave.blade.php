@@ -62,11 +62,11 @@
                                         <div class="row">
                                             <div class="form-group col-md-4 col-12">
                                                 <dt>HOD Approval</dt>
-                                                <dd class="fw-bold {{$leave->hod_approval == 'Approved' ? 'text-success' : 'text-warning'}}">{{$leave->hod_approval}}</dd>
+                                                <dd class="fw-bold {{$leave->hod_approval == 'Approved' ? 'text-white bg-success w-25 p-1 rounded' : 'text-warning'}}">{{$leave->hod_approval}}</dd>
                                             </div>
                                             <div class="form-group col-md-4 col-12">
                                                 <dt>Final Approval</dt>
-                                                <dd class="fw-bold {{$leave->final_approval == 'Approved' ? 'text-success' : 'text-warning'}}">{{$leave->final_approval}}</dd>
+                                                <dd class="fw-bold {{$leave->final_approval == 'Approved' ? 'text-white bg-success w-25 p-1 rounded' : 'text-warning'}}">{{$leave->final_approval}}</dd>
                                             </div>
                                         </div>
                                     </dl>

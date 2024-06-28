@@ -41,7 +41,7 @@ class HomeController extends Controller
                 $leave_applications = Leave::where('user_id', $user->id)->get();
             }
             
-            return view('home', compact(['leave_applications', 'superAdmin', 'admin', 'hod']));
+            return view('home', compact(['leave_applications', 'superAdmin', 'admin', 'hod', 'user']));
         } else {
             // Handle the case where $user is null
             return redirect()->route('login')->withErrors('You need to be logged in to view leave applications.');
