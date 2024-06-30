@@ -14,7 +14,7 @@ class LeavePolicy
      */
     public function viewAny(User $user): bool
     {
-        //
+        return $user->role_id == config('roles.ADMIN') || $user->role_id == config('roles.SUPER_ADMIN');
     }
 
     /**
@@ -22,7 +22,7 @@ class LeavePolicy
      */
     public function view(User $user, Leave $leave): bool
     {
-        //
+        return $user->id == $leave->user_id;
     }
 
     /**
@@ -30,7 +30,7 @@ class LeavePolicy
      */
     public function create(User $user): bool
     {
-        return $user->role_id == env('SUPER_ADMIN') || $user->role_id == env('ADMIN') || $user->role_id == env('HOD');
+        return $user->role_id == config('roles.SUPER_ADMIN') || $user->role_id == config('roles.ADMIN') || $user->role_id == config('roles.HOD');
     }
 
     /**

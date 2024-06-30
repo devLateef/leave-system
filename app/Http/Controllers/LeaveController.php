@@ -15,8 +15,20 @@ class LeaveController extends Controller
      */
     public function index()
     {
-        $leave_applications = Leave::with('user')->get();
-        return view('active-request', compact('leave_applications'));
+        $user = Auth::user();
+        $superAdmin = config('roles.SUPER_ADMIN');
+        $admin = config('roles.ADMIN');
+        $hod = config('roles.HOD');
+        if ($user->role_id == config('roles.ADMIN') || $user->role_id == config('roles.SUPER_ADMIN')) {
+        $leave_applications = Leave::where('final_approval', 'Approved')->get();
+        } elseif ($user->role_id == config('roles.HOD')) {
+        $leave_applications = Leave::whereHas('user', function($query) use ($user) {
+            $query->where('department', $user->department);
+        })->get();
+        } else {
+        $leave_applications = Leave::where('user_id', $user->id)->get();
+        }
+        return view('active-request', compact(['leave_applications', 'superAdmin', 'admin', 'hod', 'user']));
     }
 
     /**
@@ -50,7 +62,12 @@ class LeaveController extends Controller
      */
     public function show(Leave $leave)
     {
-        $this->authorize('create', $leave);
+        $user = Auth::user();
+        if($user->role_id == config('roles.ADMIN') || $user->role_id == config('roles.SUPER_ADMIN')){
+            $this->authorize('viewAny', Leave::class);
+        }else{
+            $this->authorize('view', $leave);
+        }
         return view('show-leave', compact('leave'));
     }
 
@@ -77,7 +94,55 @@ class LeaveController extends Controller
     {
         //
     }
-    public function approve(Request $request, Leave $leave){
-        //
+
+    public function defered(){
+        $user = Auth::user();
+        $superAdmin = config('roles.SUPER_ADMIN');
+        $admin = config('roles.ADMIN');
+        $hod = config('roles.HOD');
+        if ($user->role_id == config('roles.ADMIN') || $user->role_id == config('roles.SUPER_ADMIN')) {
+            $leave_applications = Leave::where('final_approval', 'Defered')->get();
+        } elseif ($user->role_id == config('roles.HOD')) {
+            $leave_applications = Leave::whereHas('user', function($query) use ($user) {
+                $query->where('department', $user->department);
+            })->get();
+        } else {
+            $leave_applications = Leave::where('user_id', $user->id)->get();
+        }
+        return view('defer-leave', compact(['leave_applications', 'admin', 'hod', 'superAdmin', 'user']));
+    }
+
+    public function declined(){
+        $user = Auth::user();
+        $superAdmin = config('roles.SUPER_ADMIN');
+        $admin = config('roles.ADMIN');
+        $hod = config('roles.HOD');
+        if ($user->role_id == config('roles.ADMIN') || $user->role_id == config('roles.SUPER_ADMIN')) {
+            $leave_applications = Leave::where('final_approval', 'Declined')->get();
+        } elseif ($user->role_id == config('roles.HOD')) {
+            $leave_applications = Leave::whereHas('user', function($query) use ($user) {
+                $query->where('department', $user->department);
+            })->get();
+        } else {
+            $leave_applications = Leave::where('user_id', $user->id)->get();
+        }
+        return view('decline-leave', compact(['leave_applications', 'admin', 'hod', 'superAdmin', 'user']));
+    }
+
+    public function pending(){
+        $user = Auth::user();
+        $superAdmin = config('roles.SUPER_ADMIN');
+        $admin = config('roles.ADMIN');
+        $hod = config('roles.HOD');
+        if ($user->role_id == config('roles.ADMIN') || $user->role_id == config('roles.SUPER_ADMIN')) {
+        $leave_applications = Leave::where('final_approval', 'Pending')->get();
+        } elseif ($user->role_id == config('roles.HOD')) {
+        $leave_applications = Leave::whereHas('user', function($query) use ($user) {
+            $query->where('department', $user->department);
+        })->get();
+        } else {
+        $leave_applications = Leave::where('user_id', $user->id)->get();
+        }
+        return view('pending-request', compact(['leave_applications', 'superAdmin', 'admin', 'hod', 'user']));
     }
 }

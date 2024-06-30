@@ -25,7 +25,12 @@ Route::get('/', function () {
 Route::get('/apply', [LeaveController::class, 'create'])->name('apply');
 Route::post('/store', [LeaveController::class, 'store'])->name('store');
 Route::get('/show/{leave}', [LeaveController::class, 'show'])->name('show-leave');
+Route::get('/defered', [LeaveController::class, 'defered'])->name('defered');
+Route::get('/declined', [LeaveController::class, 'declined'])->name('declined');
+Route::get('/pending', [LeaveController::class, 'pending'])->name('pending');
 Route::post('/approve', [CommentController::class, 'store'])->name('approve');
+Route::post('/defer', [CommentController::class, 'storeDefer'])->name('defer');
+Route::post('/decline', [CommentController::class, 'storeDecline'])->name('decline');
 Route::get('/show-profile', [HomeController::class, 'show'])->name('show-profile');
 Route::get('/edit-profile', [HomeController::class, 'edit'])->name('edit-profile');
 // Route::get('/role', function () {

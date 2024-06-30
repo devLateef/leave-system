@@ -62,14 +62,17 @@
                                         <div class="row">
                                             <div class="form-group col-md-4 col-12">
                                                 <dt>HOD Approval</dt>
-                                                <dd class="fw-bold {{$leave->hod_approval == 'Approved' ? 'text-white bg-success w-25 p-1 rounded' : 'text-warning'}}">{{$leave->hod_approval}}</dd>
+                                                <dd class="fw-bold {{$leave->hod_approval == 'Approved' ? 'text-white bg-success w-25 p-1 rounded' : ($leave->hod_approval == 'Defered' ? 'text-white bg-warning w-25 p-1 rounded' : ($leave->hod_approval == 'Pending' ? 'text-white bg-warning w-25 p-1 rounded' : 'text-white bg-danger w-25 p-1 rounded'))}}">{{$leave->hod_approval}}</dd>
                                             </div>
                                             <div class="form-group col-md-4 col-12">
                                                 <dt>Final Approval</dt>
-                                                <dd class="fw-bold {{$leave->final_approval == 'Approved' ? 'text-white bg-success w-25 p-1 rounded' : 'text-warning'}}">{{$leave->final_approval}}</dd>
+                                                <dd class="fw-bold {{$leave->final_approval == 'Approved' ? 'text-white bg-success w-25 p-1 rounded' : ($leave->final_approval == 'Defered' ? 'text-white bg-warning w-25 p-1 rounded' : ($leave->final_approval == 'Pending' ? 'text-white bg-warning w-25 p-1 rounded' : 'text-white bg-danger w-25 p-1 rounded'))}}">{{$leave->final_approval}}</dd>
                                             </div>
                                         </div>
                                     </dl>
+                                    @if(Auth::check() && Auth::user()->role_id == config('roles.ADMIN') 
+                                    || Auth::user()->role_id == config('roles.SUPER_ADMIN') || 
+                                    Auth::user()->role_id == config('roles.HOD'))
                                     <div class="d-lg-flex d-md-flex justify-content-between">
                                         <button type="button"
                                             class="btn btn-primary bg-success mt-2 col-lg-2 col-md-5 col-12"
@@ -84,6 +87,7 @@
                                             data-bs-toggle="modal"
                                             data-bs-target="#declineModal">Decline Request</button>
                                     </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -145,7 +149,8 @@
                                 aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <form method="GET">
+                            <form method="POST" action="{{route('defer')}}">
+                                @csrf
                                 <div class="mb-3">
                                     <label for="recipient-name" class="col-form-label">Defer Start
                                         Date:</label>
@@ -157,10 +162,11 @@
                                         Date:</label>
                                     <input type="date" class="form-control" id="approved_end_date" name="end_date">
                                 </div>
+                                <input type="number" class="form-control d-none" id="leave_id" value="{{$leave->id}}" name="leave_id">
                                 <div class="mb-3">
                                     <label for="message-text"
                                         class="col-form-label">Reason:</label>
-                                    <textarea class="form-control" id="message-text" name="reason"></textarea>
+                                    <textarea class="form-control" id="message-text" name="message"></textarea>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary bg-danger"
@@ -185,10 +191,12 @@
                                 aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <form method="GET">
+                            <form method="POST" action="{{route('decline')}}">
+                                @csrf
+                                <input type="number" class="form-control d-none" id="leave_id" value="{{$leave->id}}" name="leave_id">
                                 <div class="mb-3">
                                     <label for="message-text" class="col-form-label">Reason:</label>
-                                    <textarea class="form-control" id="message-text" name="reason"></textarea>
+                                    <textarea class="form-control" id="message-text" name="message"></textarea>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary bg-danger"

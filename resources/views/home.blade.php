@@ -23,7 +23,7 @@
                                     <h4>Approved Leaves</h4>
                                 </div>
                                 <div class="card-body">
-                                    47
+                                    {{$approved_leaves}}
                                 </div>
                             </div>
                         </div>
@@ -38,7 +38,7 @@
                                     <h4>Pending Leaves</h4>
                                 </div>
                                 <div class="card-body">
-                                    10
+                                    {{$pending_leaves}}
                                 </div>
                             </div>
                         </div>
@@ -53,22 +53,22 @@
                                     <h4>Declined Leaves</h4>
                                 </div>
                                 <div class="card-body">
-                                    42
+                                    {{$declined_leaves}}
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-6 col-sm-6 col-12">
                         <div class="card card-statistic-2">
-                            <div class="card-icon bg-primary">
+                            <div class="card-icon bg-info">
                                 <i class="far fa-user"></i>
                             </div>
                             <div class="card-wrap">
                                 <div class="card-header">
-                                    <h4>Total Applications</h4>
+                                    <h4>Defered Leaves</h4>
                                 </div>
                                 <div class="card-body">
-                                    {{count($leave_applications)}}
+                                    {{$defered_leaves}}
                                 </div>
                             </div>
                         </div>
@@ -95,13 +95,13 @@
                         <td>{{$leave->leave_type}}</td>
                         <td>{{$leave->start_date}}</td>
                         <td>{{$leave->end_date}}</td>
-                        <td class="fw-bold {{$leave->hod_approval == 'Approved' ? 'text-success' : 'text-warning'}}">{{$leave->hod_approval}}</td>
-                        <td class="fw-bold {{$leave->final_approval == 'Approved' ? 'text-success' : 'text-warning'}}">{{$leave->final_approval}}</td>
+                        <td class="fw-bold {{ $leave->hod_approval == 'Approved' ? 'text-success' : ($leave->hod_approval == 'Defered' ? 'text-warning' : ($leave->hod_approval == 'Pending' ? 'text-warning' : 'text-danger')) }}">{{$leave->hod_approval}}</td>
+                        <td class="fw-bold {{ $leave->final_approval == 'Approved' ? 'text-success' : ($leave->final_approval == 'Defered' ? 'text-warning' : ($leave->final_approval == 'Pending' ? 'text-warning' : 'text-danger')) }}">{{$leave->final_approval}}</td>
                         <td>
                             @if($user->role_id == $superAdmin || $user->role_id == $admin || $user->role_id == $hod)
                                 <a href="{{route('show-leave', $leave->id)}}"><button class="btn btn-primary m-2">Show Details</button></a>
                                 @else
-                                <a href="#"><button class="btn btn-primary mb-1 mt-1">Show</button></a>
+                                <a href="{{route('show-leave', $leave->id)}}"><button class="btn btn-primary mb-1 mt-1">Show</button></a>
                                 <a href="#"><button class="btn btn-danger mb-1">Delete</button></a>
                             @endif
                         </td>

@@ -14,10 +14,13 @@
                         class="fa fa-columns"></i> <span>Leave Management</span></a>
                 <ul class="dropdown-menu" style="display: none;">
                     <li><a class="nav-link" href="{{route('apply')}}">Request for Leave</a></li>
-                    <li><a class="nav-link" href="{{route('active')}}">Ongoing Requests</a></li>
-                    <li><a class="nav-link" href="">Granted Leaves</a></li>
+                    <li><a class="nav-link" href="{{route('active')}}">Approved Leaves</a></li>
+                    <li><a class="nav-link" href="{{route('defered')}}">Deferred Leaves</a></li>
+                    <li><a class="nav-link" href="{{route('declined')}}">Declined Leaves</a></li>
+                    <li><a class="nav-link" href="{{route('pending')}}">Pending Leaves</a></li>
                 </ul>
             </li>
+            @if(Auth::check() && Auth::user()->role_id == config('roles.ADMIN') || Auth::user()->role_id == config('roles.SUPER_ADMIN') || Auth::user()->role_id == config('roles.HOD'))
             <li class="nav-item dropdown">
                 <a href="#" class="nav-link has-dropdown text-body" data-toggle="dropdown"><i
                         class="fa fa-user"></i>
@@ -27,6 +30,7 @@
                     <li><a class="nav-link" href="">All Users</a></li>
                 </ul>
             </li>
+            @endif
         </ul>
     </aside>
 </div>
