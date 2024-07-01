@@ -4,8 +4,7 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LeaveController;
 use Illuminate\Support\Facades\Route;
-use App\Models\Role;
-use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
