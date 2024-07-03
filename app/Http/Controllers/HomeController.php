@@ -62,13 +62,13 @@ class HomeController extends Controller
         }
         if ($user) {
             if($user->role_id == $superAdmin || $user->role_id == $admin){
-                $leave_applications = Leave::all();
+                $leave_applications = Leave::orderBy('created_at', 'desc')->get();
             }elseif($user->role_id == $hod){
-                $leave_applications = Leave::whereHas('user', function($query) use ($user) {
+                $leave_applications = Leave::orderBy('created_at', 'desc')->whereHas('user', function($query) use ($user) {
                     $query->where('department', $user->department);
                 })->get();
             }else{
-                $leave_applications = Leave::where('user_id', $user->id)->get();
+                $leave_applications = Leave::orderBy('created_at', 'desc')->where('user_id', $user->id)->get();
             }
             
             return view('home', compact(['leave_applications', 'superAdmin', 'admin', 'hod', 'user', 
@@ -77,16 +77,5 @@ class HomeController extends Controller
             // Handle the case where $user is null
             return redirect()->route('login')->withErrors('You need to be logged in to view leave applications.');
         }
-    }
-
-    public function show()
-    {
-        $user = Auth::user();
-        return view('show-profile', compact('user'));
-    }
-
-    public function edit()
-    {
-        return view('edit-profile');
     }
 }

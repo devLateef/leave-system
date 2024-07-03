@@ -20,7 +20,7 @@
                     </div>
                 </div>
                 <div class="section-body">
-                    <h2 class="section-title">Hi, Ujang!</h2>
+                    <h2 class="section-title">Hi, {{$user->first_name}}!</h2>
                     <p class="section-lead">
                         See information about yourself on this page.
                     </p>
@@ -36,23 +36,51 @@
                                 </div>
                                 <div class="card-body">
                                     <div class="row">
-                                        <div class="form-group col-md-6 col-12">
+                                        <div class="form-group col-md-4 col-12">
                                             <dd>First Name</dd>
-                                            <dl>{{$user->email}}</dl>
+                                            <dl>{{$user->first_name}}</dl>
                                         </div>
-                                        <div class="form-group col-md-6 col-12">
+                                        <div class="form-group col-md-4 col-12">
                                             <dd>Last Name</dd>
-                                            <dl>{{$user->email}}</dl>
+                                            <dl>{{$user->last_name}}</dl>
+                                        </div>
+                                        <div class="form-group col-md-4 col-12">
+                                            <dd>Staff ID</dd>
+                                            <dl>{{$user->staff_id}}</dl>
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="form-group col-md-6 col-12">
-                                            <dd>Phone</dd>
-                                            <dl>{{$user->email}}</dl>
+                                        <div class="form-group col-md-4 col-12">
+                                            <dd>Date of Birth</dd>
+                                            <dl>{{$user->dob}}</dl>
                                         </div>
-                                        <div class="form-group col-md-6 col-12">
+                                        <div class="form-group col-md-4 col-12">
                                             <dd>Phone</dd>
-                                            <dl>{{$user->email}}</dl>
+                                            <dl>{{$user->phone}}</dl>
+                                        </div>
+                                        <div class="form-group col-md-4 col-12">
+                                            <dd>Department</dd>
+                                            <dl>{{$user->department}}</dl>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-md-4 col-12">
+                                            <dd>Gender</dd>
+                                            <dl>{{$user->gender}}</dl>
+                                        </div>
+                                        <div class="form-group col-md-4 col-12">
+                                            <dd>City</dd>
+                                            <dl>{{$user->city}}</dl>
+                                        </div>
+                                        <div class="form-group col-md-4 col-12">
+                                            <dd>Country</dd>
+                                            <dl>{{$user->country}}</dl>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-md-12 col-12">
+                                            <dd>Address</dd>
+                                            <dl>{{$user->address}}</dl>
                                         </div>
                                     </div>
                                 </div>

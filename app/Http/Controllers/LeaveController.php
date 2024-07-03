@@ -15,20 +15,7 @@ class LeaveController extends Controller
      */
     public function index()
     {
-        $user = Auth::user();
-        $superAdmin = config('roles.SUPER_ADMIN');
-        $admin = config('roles.ADMIN');
-        $hod = config('roles.HOD');
-        if ($user->role_id == config('roles.ADMIN') || $user->role_id == config('roles.SUPER_ADMIN')) {
-        $leave_applications = Leave::where('final_approval', 'Approved')->get();
-        } elseif ($user->role_id == config('roles.HOD')) {
-        $leave_applications = Leave::whereHas('user', function($query) use ($user) {
-            $query->where('department', $user->department);
-        })->get();
-        } else {
-        $leave_applications = Leave::where('user_id', $user->id)->get();
-        }
-        return view('active-request', compact(['leave_applications', 'superAdmin', 'admin', 'hod', 'user']));
+        //
     }
 
     /**
@@ -36,6 +23,7 @@ class LeaveController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', Leave::class);
         return view('apply');
     }
 
@@ -63,8 +51,13 @@ class LeaveController extends Controller
     public function show(Leave $leave)
     {
         $user = Auth::user();
-        if($user->role_id == config('roles.ADMIN') || $user->role_id == config('roles.SUPER_ADMIN')){
+        if($user->role_id == config('roles.ADMIN') || $user->role_id == config('roles.SUPER_ADMIN'))
+        {
             $this->authorize('viewAny', Leave::class);
+        }elseif ($user->role_id == config('roles.HOD')) {
+            $leave_applications = Leave::whereHas('user', function($query) use ($user) {
+                $query->where('department', $user->department);
+            })->get();
         }else{
             $this->authorize('view', $leave);
         }
@@ -76,7 +69,7 @@ class LeaveController extends Controller
      */
     public function edit(Leave $leave)
     {
-        //
+        return view('edit-leave', compact('leave'));
     }
 
     /**
@@ -84,7 +77,15 @@ class LeaveController extends Controller
      */
     public function update(Request $request, Leave $leave)
     {
-        //
+        $leave->leave_type = $request->leave_type;
+        $leave->start_date = $request->start_date;
+        $leave->end_date = $request->end_date;
+        $leave->designation = $request->designation;
+        $leave->standin_staff = $request->standin_staff;
+        $leave->comment = $request->comment;
+        $leave->user_id = Auth::user()->id;
+        $leave->save();
+        return redirect(route('home'));
     }
 
     /**
@@ -93,6 +94,23 @@ class LeaveController extends Controller
     public function destroy(Leave $leave)
     {
         //
+    }
+
+    public function approved(){
+        $user = Auth::user();
+        $superAdmin = config('roles.SUPER_ADMIN');
+        $admin = config('roles.ADMIN');
+        $hod = config('roles.HOD');
+        if ($user->role_id == config('roles.ADMIN') || $user->role_id == config('roles.SUPER_ADMIN')) {
+        $leave_applications = Leave::where('final_approval', 'Approved')->get();
+        } elseif ($user->role_id == config('roles.HOD')) {
+        $leave_applications = Leave::whereHas('user', function($query) use ($user) {
+            $query->where('department', $user->department);
+        })->get();
+        } else {
+        $leave_applications = Leave::where('user_id', $user->id)->get();
+        }
+        return view('active-request', compact(['leave_applications', 'superAdmin', 'admin', 'hod', 'user']));
     }
 
     public function defered(){

@@ -14,8 +14,11 @@
                 <div class="section-header">
                     <h1>Leave Details</h1>
                     <div class="section-header-breadcrumb">
-                        <div class="breadcrumb-item active"><a
-                                href="{{route('home')}}">Dashboard</a></div>
+                        <div class="breadcrumb-item active">
+                            <a href="{{route('home')}}" >
+                                <h6>Dashboard</h6>
+                            </a>
+                        </div>
                     </div>
                 </div>
                 <div class="section-body">
@@ -62,11 +65,69 @@
                                         <div class="row">
                                             <div class="form-group col-md-4 col-12">
                                                 <dt>HOD Approval</dt>
-                                                <dd class="fw-bold {{$leave->hod_approval == 'Approved' ? 'text-white bg-success w-25 p-1 rounded' : ($leave->hod_approval == 'Defered' ? 'text-white bg-warning w-25 p-1 rounded' : ($leave->hod_approval == 'Pending' ? 'text-white bg-warning w-25 p-1 rounded' : 'text-white bg-danger w-25 p-1 rounded'))}}">{{$leave->hod_approval}}</dd>
+                                                <dd class="fw-bold text-white text-center {{$leave->hod_approval == 'Approved' ? 'bg-success w-25 p-1 rounded' : ($leave->hod_approval == 'Defered' ? 'bg-warning w-25 p-1 rounded' : ($leave->hod_approval == 'Pending' ? 'bg-warning w-25 p-1 rounded' : 'bg-danger w-25 p-1 rounded'))}}">{{$leave->hod_approval}}</dd>
+                                                <div class="mt-4">
+                                                    @php
+                                                        $hodComment = null;
+                                                    @endphp
+                                                    @if($leave->hod_approval == 'Pending')
+                                                    <div></div>
+                                                    @else
+                                                    <dt>HOD {{$leave->hod_approval}} Details:</dt>
+                                                    @foreach($leave->comments as $comment)
+                                                        @if($comment->leave_id == $leave->id && $comment->user->role_id == config('roles.HOD'))
+                                                            @php
+                                                                $hodComment = $comment;
+                                                            @endphp
+                                                        @elseif($comment->leave_id == $leave->id && $comment->user->role_id == config('roles.SUPER_ADMIN'))
+                                                            @php
+                                                            $hodComment = $comment;
+                                                            @endphp
+                                                        @endif
+                                                    @endforeach
+                                                    @endif
+                                                    @if($hodComment)
+                                                        @if($leave->hod_approval == 'Declined')
+                                                        <dd class="mt-2"><em><=== Reason for {{$leave->hod_approval}}: ===></em> <br> <b>{{$hodComment->message}}</b></dd>
+                                                        @else
+                                                        <dd class="mt-2"><em>{{$leave->hod_approval}} Start Date:</em> <br> <b>{{$hodComment->start_date}}</b></dd>
+                                                        <dd><em>{{$leave->hod_approval}} End Date:</em> <br> <b>{{$hodComment->end_date}}</b></dd>
+                                                        @endif
+                                                    @endif
+                                                </div>
                                             </div>
                                             <div class="form-group col-md-4 col-12">
                                                 <dt>Final Approval</dt>
-                                                <dd class="fw-bold {{$leave->final_approval == 'Approved' ? 'text-white bg-success w-25 p-1 rounded' : ($leave->final_approval == 'Defered' ? 'text-white bg-warning w-25 p-1 rounded' : ($leave->final_approval == 'Pending' ? 'text-white bg-warning w-25 p-1 rounded' : 'text-white bg-danger w-25 p-1 rounded'))}}">{{$leave->final_approval}}</dd>
+                                                <dd class="fw-bold text-center text-white {{$leave->final_approval == 'Approved' ? 'bg-success w-25 p-1 rounded' : ($leave->final_approval == 'Defered' ? 'bg-warning w-25 p-1 rounded' : ($leave->final_approval == 'Pending' ? 'bg-warning w-25 p-1 rounded' : 'bg-danger w-25 p-1 rounded'))}}">{{$leave->final_approval}}</dd>
+                                                <div class="mt-4">
+                                                    @php
+                                                        $adminComment = null;
+                                                    @endphp
+                                                    @if($leave->final_approval == 'Pending')
+                                                    <div></div>
+                                                    @else
+                                                    <dt>Admin {{$leave->final_approval}} Details:</dt>
+                                                    @foreach($leave->comments as $comment)
+                                                        @if($comment->leave_id == $leave->id && $comment->user->role_id == config('roles.ADMIN'))
+                                                            @php
+                                                                $adminComment = $comment;
+                                                            @endphp
+                                                        @elseif($comment->leave_id == $leave->id && $comment->user->role_id == config('roles.SUPER_ADMIN'))
+                                                            @php
+                                                            $adminComment = $comment;
+                                                            @endphp
+                                                        @endif
+                                                    @endforeach
+                                                    @endif
+                                                    @if($adminComment)
+                                                        @if($leave->final_approval == 'Declined')
+                                                        <dd class="mt-2"><em><=== Reason for {{$leave->final_approval}}: ===></em> <br> <b>{{$adminComment->message}}</b></dd>
+                                                        @else
+                                                        <dd class="mt-2"><em>{{$leave->final_approval}} Start Date:</em> <br> <b>{{$adminComment->start_date}}</b></dd>
+                                                        <dd><em>{{$leave->final_approval}} End Date:</em> <br> <b>{{$adminComment->end_date}}</b></dd>
+                                                        @endif
+                                                    @endif
+                                                </div>
                                             </div>
                                         </div>
                                     </dl>
@@ -106,7 +167,7 @@
                                 aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <form method="POST" action="{{route('approve')}}">
+                            <form method="POST" action="{{route('comments.approve')}}">
                                 @csrf
                                 <div class="mb-3">
                                     <label for="recipient-name" class="col-form-label">Approve Start
@@ -149,7 +210,7 @@
                                 aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <form method="POST" action="{{route('defer')}}">
+                            <form method="POST" action="{{route('comments.defer')}}">
                                 @csrf
                                 <div class="mb-3">
                                     <label for="recipient-name" class="col-form-label">Defer Start
@@ -191,7 +252,7 @@
                                 aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <form method="POST" action="{{route('decline')}}">
+                            <form method="POST" action="{{route('comments.decline')}}">
                                 @csrf
                                 <input type="number" class="form-control d-none" id="leave_id" value="{{$leave->id}}" name="leave_id">
                                 <div class="mb-3">

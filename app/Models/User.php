@@ -18,9 +18,17 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
-        'department',
+        'first_name',
+        'last_name',
+        'staff_id',
         'email',
+        'gender',
+        'dob',
+        'department',
+        'phone',
+        'city',
+        'country',
+        'address',
         'password',
     ];
 
@@ -50,6 +58,10 @@ class User extends Authenticatable
 
     public function leaves(){
         return $this->hasMany(Leave::class);
+    }
+
+    public function comment(){
+        return $this->hasOne(Comment::class);
     }
 
 }

@@ -21,4 +21,8 @@ class Comment extends Model
     public function leave(){
         return $this->belongsTo(Leave::class);
     }
+
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
 }

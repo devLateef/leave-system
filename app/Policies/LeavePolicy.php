@@ -6,6 +6,7 @@ use App\Models\Leave;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
+use Illuminate\Support\Facades\Auth;
 
 class LeavePolicy
 {
@@ -30,7 +31,7 @@ class LeavePolicy
      */
     public function create(User $user): bool
     {
-        return $user->role_id == config('roles.SUPER_ADMIN') || $user->role_id == config('roles.ADMIN') || $user->role_id == config('roles.HOD');
+        return $user->exists;
     }
 
     /**
@@ -38,7 +39,7 @@ class LeavePolicy
      */
     public function update(User $user, Leave $leave): bool
     {
-        //
+        return $user->id == $leave->user_id;
     }
 
     /**

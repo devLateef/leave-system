@@ -14,64 +14,73 @@
                 </div>
                 <div class="row">
                     <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-                        <div class="card card-statistic-2">
-                            <div class="card-icon bg-success">
-                                <i class="fas fa-check"></i>
-                            </div>
-                            <div class="card-wrap">
-                                <div class="card-header">
-                                    <h4>Approved Leaves</h4>
+                        <a href="{{route('leaves.active')}}">
+                            <div class="card card-statistic-2">
+                                <div class="card-icon bg-success">
+                                    <i class="fas fa-check"></i>
                                 </div>
-                                <div class="card-body">
-                                    {{$approved_leaves}}
+                                <div class="card-wrap">
+                                    <div class="card-header">
+                                        <h4>Approved Leaves</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        {{$approved_leaves}}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                     <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-                        <div class="card card-statistic-2">
-                            <div class="card-icon bg-warning">
-                                <i class="fas fa-history"></i>
-                            </div>
-                            <div class="card-wrap">
-                                <div class="card-header">
-                                    <h4>Pending Leaves</h4>
+                        <a href="{{route('leaves.pending')}}">
+                            <div class="card card-statistic-2">
+                                <div class="card-icon bg-warning">
+                                    <i class="fas fa-history"></i>
                                 </div>
-                                <div class="card-body">
-                                    {{$pending_leaves}}
+                                <div class="card-wrap">
+                                    <div class="card-header">
+                                        <h4>Pending Leaves</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        {{$pending_leaves}}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                     <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-                        <div class="card card-statistic-2">
-                            <div class="card-icon bg-danger">
-                                <i class="far fa-times-circle"></i>
-                            </div>
-                            <div class="card-wrap">
-                                <div class="card-header">
-                                    <h4>Declined Leaves</h4>
+                        <a href="{{route('leaves.declined')}}">
+                            <div class="card card-statistic-2">
+                                <div class="card-icon bg-danger">
+                                    <i class="far fa-times-circle"></i>
                                 </div>
-                                <div class="card-body">
-                                    {{$declined_leaves}}
+                                <div class="card-wrap">
+                                    <div class="card-header">
+                                        <h4>Declined Leaves</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        {{$declined_leaves}}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                     <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-                        <div class="card card-statistic-2">
-                            <div class="card-icon bg-info">
-                                <i class="far fa-user"></i>
-                            </div>
-                            <div class="card-wrap">
-                                <div class="card-header">
-                                    <h4>Defered Leaves</h4>
+                        <a href="{{route('leaves.defered')}}">
+                            <div class="card card-statistic-2">
+                                <div class="card-icon bg-info">
+                                    <i class="far fa-user"></i>
                                 </div>
-                                <div class="card-body">
-                                    {{$defered_leaves}}
+                                
+                                <div class="card-wrap">
+                                    <div class="card-header">
+                                        <h4>Defered Leaves</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        {{$defered_leaves}}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                    </a>
                     </div>
                 </div>
             </section>
@@ -90,7 +99,7 @@
                 <tbody>
                     @if(count($leave_applications) > 0)
                     @foreach ($leave_applications as $leave)
-                    <tr class="clickable" role="button" onclick="window.location='{{route('show-leave', $leave->id)}}'">
+                    <tr class="clickable" role="button" onclick="window.location='{{route('leaves.show', $leave->id)}}'">
                         <td scope="row">{{$loop->iteration}}</td>
                         <td>{{$leave->leave_type}}</td>
                         <td>{{$leave->start_date}}</td>
@@ -99,10 +108,12 @@
                         <td class="fw-bold {{ $leave->final_approval == 'Approved' ? 'text-success' : ($leave->final_approval == 'Defered' ? 'text-warning' : ($leave->final_approval == 'Pending' ? 'text-warning' : 'text-danger')) }}">{{$leave->final_approval}}</td>
                         <td>
                             @if($user->role_id == $superAdmin || $user->role_id == $admin || $user->role_id == $hod)
-                                <a href="{{route('show-leave', $leave->id)}}"><button class="btn btn-primary m-2">Show Details</button></a>
-                                @else
-                                <a href="{{route('show-leave', $leave->id)}}"><button class="btn btn-primary mb-1 mt-1">Show</button></a>
-                                <a href="#"><button class="btn btn-danger mb-1">Delete</button></a>
+                            <a href="{{route('leaves.show', $leave->id)}}"><button class="btn btn-primary m-2">Show Details</button></a>
+                            @elseif($leave->hod_approval == 'Pending' || $leave->final_approval == 'Pending')
+                            <a href="{{route('leaves.show', $leave->id)}}"><button class="btn btn-primary mb-1 mt-1">Show</button></a>
+                            <a href="{{route('leaves.edit', $leave->id)}}"><button class="btn btn-danger mb-1">Edit</button></a>
+                            @else
+                            <a href="{{route('leaves.show', $leave->id)}}"><button class="btn btn-primary mb-1 mt-1">Show</button></a>
                             @endif
                         </td>
                     </tr>

@@ -26,13 +26,21 @@ class UserFactory extends Factory
     {
         return [
                 // 'name' => fake()->name(),
-                'name' => env('ADMIN_NAME'),
-                'department' => env('ADMIN_DEPARTMENT'),
+                'first_name' => config('admin.FIRST_NAME'),
+                'last_name' => config('admin.LAST_NAME'),
+                'staff_id' => config('admin.STAFFID'),
+                'department' => config('admin.DEPARTMENT'),
                 'role_id' => env('ADMIN'),
                 // 'email' => fake()->unique()->safeEmail(),
-                'email' => env('ADMIN_EMAIL'),
+                'email' => config('admin.EMAIL'),
+                'phone' => config('admin.PHONE'),
+                'city' => config('admin.CITY'),
+                'country' => config('admin.COUNTRY'),
+                'address' => config('admin.ADDRESS'),
+                'gender' => config('admin.GENDER'),
+                'role_id' => config('admin.ROLEID'),
                 'email_verified_at' => now(),
-                'password' => static::$password ??= Hash::make(env('ADMIN_PASSWORD')),
+                'password' => static::$password ??= Hash::make(config('admin.PASSWORD')),
                 'remember_token' => Str::random(10),
 
 
