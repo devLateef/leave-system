@@ -39,30 +39,35 @@
                             </div>
                             <div class="row">
                                 <div class="form-group col-6">
+                                    <label for="department">Department:</label>
+                                    <select id="department" name="department" class="form-control selectric" required>
+                                        <option value="">Choose Department</option>
+                                        @foreach($departments as $department)
+                                            <option value="{{$department->department}}">{{$department->department}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group col-6">
                                     <label for="email" class="d-block">Staff Email:</label>
                                     <input id="email" type="email" class="form-control"
                                         name="email" required>
                                 </div>
-                                <div class="form-group col-6">
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-4">
                                     <label for="gender" class="d-block">Gender:</label>
                                     <select id="gender" name="gender" class="form-control selectric" required>
-                                        <option value="0">Select Option</option>
+                                        <option value="">Select Option</option>
                                         <option value="Male">Male</option>
                                         <option value="Female">Female</option>
                                     </select>
                                 </div>
-                            </div>
-                            <div class="row">
                                 <div class="form-group col-4">
                                     <label for="dob">Date of Birth:</label>
                                     <input id="dob" type="date" class="form-control"
                                         name="dob" required>
                                 </div>
-                                <div class="form-group col-4">
-                                    <label for="department">Department:</label>
-                                    <input id="department" type="text" class="form-control"
-                                        name="department" required>
-                                </div>
+                                
                                 <div class="form-group col-4">
                                     <label for="phone">Phone Number:</label>
                                     <input id="phone" type="tel" class="form-control"
@@ -71,21 +76,42 @@
                             </div>
                             <div class="row">
                                 <div class="form-group col-6">
-                                    <label for="city">City:</label>
-                                    <input id="city" type="text" class="form-control"
-                                        name="city" required>
+                                    <label for="country">Country:</label>
+                                    <select id="country" name="country" class="form-control selectric" required>
+                                        <option value="">Choose Option</option>
+                                        <option value="Nigeria">Nigeria</option>
+                                    </select>
                                 </div>
                                 <div class="form-group col-6">
-                                    <label for="country">Country:</label>
-                                    <input id="country" type="text" class="form-control"
-                                        name="country" required>
+                                    <label for="city">City:</label>
+                                    <select id="city" name="city" class="form-control selectric" required>
+                                        <option value="">Choose Option</option>
+                                        <option value="Abeokuta">Abeokuta</option>
+                                    </select>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label for="address">Address:</label>
-                                <textarea id="address" class="form-control" name="address"
-                                    rows="5"></textarea>
-                                <div class="invalid-feedback">
+                            <div class="row">
+                                <div class="form-group col-6">
+                                    <label for="academic_staff">Is Academic Staff?:</label>
+                                    <select id="academic_staff" name="is_academic_staff" class="form-control selectric" required>
+                                        <option value="">Choose Option</option>
+                                        <option value="1">Yes</option>
+                                        <option value="0">No</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-6">
+                                    <label for="leave_balance">Leave Balance:</label>
+                                    <input id="leave_balance" type="number" class="form-control"
+                                        name="leave_balance" required>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-12">
+                                    <label for="address">Address:</label>
+                                    <textarea id="address" class="form-control" name="address"
+                                        rows="5"></textarea>
+                                    <div class="invalid-feedback">
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -104,12 +130,36 @@
     </div>
 </section>
 <script>
+
     document.getElementById('userForm').addEventListener('submit', function(event) {
-        var userType = document.getElementById('gender').value;
-        if (userType == '0') {
-            alert('Please select a valid gender type.');
+        var userType = document.getElementById('country').value;
+        if (userType == '') {
+            alert('Please select a valid country type.');
             event.preventDefault(); // Prevent form submission
         }
     });
-    </script>
+    
+    // // Create a new Headers object
+    // var headers = new Headers();
+    // headers.append("X-CSCAPI-KEY", "API_KEY");  // Replace with your actual API key
+
+    // // Set the request options
+    // var requestOptions = {
+    //     method: 'GET',
+    //     headers: headers,
+    //     redirect: 'follow'
+    // };
+
+    // // Perform the fetch request
+    // fetch("https://api.countrystatecity.in/v1/countries/IN/states", requestOptions)
+    //     .then(response => {
+    //         // Check if the response status is OK (status 200-299)
+    //         if (!response.ok) {
+    //             throw new Error('Network response was not ok ' + response.statusText);
+    //         }
+    //         return response.json(); // Parse the JSON from the response
+    //     })
+    //     .then(result => console.log(result)) // Log the result to the console
+    //     .catch(error => console.log('Fetch error: ', error)); // Log any errors that occur
+</script>
 @endsection

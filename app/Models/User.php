@@ -27,6 +27,8 @@ class User extends Authenticatable
         'department',
         'phone',
         'city',
+        'is_academic_staff',
+        'leave_balance',
         'country',
         'address',
         'password',
@@ -62,6 +64,10 @@ class User extends Authenticatable
 
     public function comment(){
         return $this->hasOne(Comment::class);
+    }
+
+    public function department(){
+        return $this->hasOne(Department::class);
     }
 
 }

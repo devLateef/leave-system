@@ -30,15 +30,25 @@
                         </div>
                         <div class="col-12 col-md-12 col-lg-12">
                             <div class="card">
-                                <form method="post" class="needs-validation" novalidate="">
+                                <form method="post" id="form" class="needs-validation" novalidate="" action="{{route('profile.update-password', $user->id)}}">
+                                    @csrf
+                                    @method('PUT')
                                     <div class="card-header">
                                         <h4>Edit Password</h4>
                                     </div>
                                     <div class="card-body">
+                                        @if (session('success'))
+                                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                            {{ session('success') }}
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        @endif
                                         <div class="row">
                                             <div class="form-group col-md-12 col-12">
-                                                <label>New Password</label>
-                                                <input type="password" class="form-control" name="first_name"
+                                                <label for="password">New Password</label>
+                                                <input type="password" id="new_password" class="form-control" name="password"
                                                     value="" required>
                                                 <div class="invalid-feedback">
                                                     Please fill in the new password
@@ -47,8 +57,8 @@
                                         </div>
                                         <div class="row">
                                             <div class="form-group col-md-12 col-12">
-                                                <label>Confirm New Password</label>
-                                                <input type="password" class="form-control" name="last_name"
+                                                <label for="password_confirmation">Confirm New Password</label>
+                                                <input type="password" id="password_confirmation" class="form-control" name="password_confirmation"
                                                     value="" required>
                                                 <div class="invalid-feedback">
                                                     Please fill in the confirm password
@@ -69,4 +79,30 @@
         @include('layouts.footer')
     </div>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.querySelector('form');
+        const newPassword = document.getElementById('new_password');
+        const confirmPassword = document.getElementById('confirm_password');
+
+        form.addEventListener('submit', function (event) {
+            if (newPassword.value !== confirmPassword.value) {
+                event.preventDefault(); // Prevent form submission
+                confirmPassword.setCustomValidity('Passwords do not match');
+                confirmPassword.reportValidity(); // Show the custom validation message
+            } else {
+                confirmPassword.setCustomValidity(''); // Clear any previous custom validation messages
+            }
+        });
+
+        // Optional: Add real-time validation
+        confirmPassword.addEventListener('input', function () {
+            if (newPassword.value !== confirmPassword.value) {
+                confirmPassword.setCustomValidity('Passwords do not match');
+            } else {
+                confirmPassword.setCustomValidity('');
+            }
+        });
+    });
+</script>
 @endsection

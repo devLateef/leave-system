@@ -13,7 +13,7 @@ class Comment extends Model
         "start_date",
         "end_date",
         "message",
-        "reason",
+        "days_given",
         "leave_id",
         "user_id"
     ];

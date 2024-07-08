@@ -25,6 +25,8 @@ return new class extends Migration
             $table->string('city');
             $table->string('country');
             $table->string('address');
+            $table->boolean('is_academic_staff')->nullable();
+            $table->integer('leave_balance')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->default(Hash::make(config('admin.DEFAULT')));
             $table->rememberToken();

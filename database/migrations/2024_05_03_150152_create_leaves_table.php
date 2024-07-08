@@ -16,6 +16,7 @@ return new class extends Migration {
             $table->date('start_date');
             $table->date('end_date');
             $table->string('designation');
+            $table->integer('total_days_requested')->nullable();
             $table->string('hod_approval')->default('Pending');
             $table->string('final_approval')->default('Pending');
             $table->string('standin_staff')->nullable();

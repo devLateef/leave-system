@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Comment;
 use App\Models\Leave;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class CommentController extends Controller
@@ -36,6 +37,9 @@ class CommentController extends Controller
         ]);
 
         $user = Auth::user();
+        $startDate = Carbon::parse($request->start_date);
+        $endDate = Carbon::parse($request->end_date);
+        $totalDaysGiven = $startDate->diffInDays($endDate) + 1; // Include the start date
         $existing_comment = Comment::where('user_id', $user->id)
         ->where('leave_id', $request->leave_id)->first();
 
@@ -43,6 +47,7 @@ class CommentController extends Controller
             $existing_comment->start_date = $request->start_date;
             $existing_comment->end_date = $request->end_date;
             $existing_comment->message = $request->message;
+            $existing_comment->days_given = $totalDaysGiven;
             $existing_comment->save();
         }else{
             $new_comment = new Comment();
@@ -51,6 +56,7 @@ class CommentController extends Controller
             $new_comment->message = $request->message;
             $new_comment->leave_id = $request->leave_id;
             $new_comment->user_id = Auth::user()->id;
+            $new_comment->days_given = $totalDaysGiven;
             $new_comment->save();
         }
 
@@ -114,6 +120,9 @@ class CommentController extends Controller
         ]);
 
         $user = Auth::user();
+        $startDate = Carbon::parse($request->start_date);
+        $endDate = Carbon::parse($request->end_date);
+        $totalDaysGiven = $startDate->diffInDays($endDate) + 1; // Include the start date
         $existing_comment = Comment::where('user_id', $user->id)
         ->where('leave_id', $request->leave_id)->first();
 
@@ -121,6 +130,7 @@ class CommentController extends Controller
             $existing_comment->start_date = $request->start_date;
             $existing_comment->end_date = $request->end_date;
             $existing_comment->message = $request->message;
+            $existing_comment->days_given = $totalDaysGiven;
             $existing_comment->save();
         }else{
             $new_comment = new Comment();
@@ -129,6 +139,7 @@ class CommentController extends Controller
             $new_comment->message = $request->message;
             $new_comment->leave_id = $request->leave_id;
             $new_comment->user_id = Auth::user()->id;
+            $new_comment->days_givem = $totalDaysGiven;
             $new_comment->save();
         }
 

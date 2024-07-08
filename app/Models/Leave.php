@@ -16,6 +16,7 @@ class Leave extends Model
         'designation',
         'standin_staff',
         'comment',
+        'total_days_requested',
         'hod_approval',
         'final_approval'
     ];

@@ -57,6 +57,7 @@ Route::prefix('leaves')->middleware('auth')->group(function () {
     Route::get('/apply', [LeaveController::class, 'create'])->name('leaves.apply');
     Route::post('/store', [LeaveController::class, 'store'])->name('leaves.store');
     Route::get('/show/{leave}', [LeaveController::class, 'show'])->name('leaves.show');
+    Route::get('/show/{leave}/approval', [LeaveController::class, 'approvalNote'])->name('leaves.approval');
     Route::get('/active', [LeaveController::class, 'approved'])->name('leaves.active');
     Route::get('/defered', [LeaveController::class, 'defered'])->name('leaves.defered');
     Route::get('/declined', [LeaveController::class, 'declined'])->name('leaves.declined');
@@ -77,6 +78,15 @@ Route::prefix('profile')->middleware('auth')->group(function () {
     Route::get('/show', [UserController::class, 'show'])->name('profile.show');
     Route::get('/edit', [UserController::class, 'edit'])->name('profile.edit');
     Route::get('/password', [UserController::class, 'createpass'])->name('profile.change');
+    Route::put('/password/{user}', [UserController::class, 'updatePass'])->name('profile.update-password');
+    Route::put('/user/{user}', [UserController::class, 'update'])->name('profile.update-user');
+    Route::get('/users', [UserController::class, 'getAllUsers'])->name('profile.all-users');
+    Route::get('/hods', [UserController::class, 'getAllHods'])->name('profile.all-hods');
+    Route::get('/users/{department}', [UserController::class, 'getUsersByDepartment']);
+    Route::post('/update-role', [UserController::class, 'updateRole'])->name('profile.update-role');
+    Route::post('/assign-admin', [UserController::class, 'assignAdmin'])->name('profile.assign-admin');
+    Route::get('/assign-hod', [UserController::class, 'getDepartments'])->name('profile.assign');
+    Route::get('/make-admin', [UserController::class, 'getAdminDepartment'])->name('profile.make-admin');
     Route::post('/store', [UserController::class, 'store'])->name('profile.store');
     Route::get('/create', [UserController::class, 'create'])->name('profile.create');
 });

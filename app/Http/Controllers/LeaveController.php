@@ -6,6 +6,7 @@ use App\Models\Comment;
 use App\Models\Leave;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon as SupportCarbon;
 use Illuminate\Support\Facades\Auth;
 
 class LeaveController extends Controller
@@ -32,17 +33,57 @@ class LeaveController extends Controller
      */
     public function store(Request $request)
     {
-        $new_leave = new Leave();
-        $new_leave->leave_type = $request->leave_type;
-        $new_leave->start_date = $request->start_date;
-        $new_leave->end_date = $request->end_date;
-        $new_leave->designation = $request->designation;
-        $new_leave->standin_staff = $request->standin_staff;
-        $new_leave->comment = $request->comment;
-        $new_leave->user_id = Auth::user()->id;
-        $new_leave->save();
-        return redirect(route('home'));
-        
+        $user = Auth::user();
+        $available_leaves = $user->available_leaves;
+        $request->validate([
+            'start_date' => ['required', 'date', function($attribute, $value, $fail) {
+                $dayOfWeek = SupportCarbon::parse($value)->dayOfWeek;
+                if ($dayOfWeek == SupportCarbon::SUNDAY || $dayOfWeek == SupportCarbon::SATURDAY) {
+                    $fail('The start date cannot be a weekend.');
+                }
+            }],
+            'end_date' => ['required', 'date', function($attribute, $value, $fail) {
+                $dayOfWeek = SupportCarbon::parse($value)->dayOfWeek;
+                if ($dayOfWeek == SupportCarbon::SUNDAY || $dayOfWeek == SupportCarbon::SATURDAY) {
+                    $fail('The end date cannot be a weekend.');
+                }
+            }],
+            'designation' => 'required|string',
+            'standin_staff' => 'required|string',
+            'comment' => 'required|string'
+        ]);
+
+        // Calculate total days requested
+        $startDate = SupportCarbon::parse($request->start_date);
+        $endDate = SupportCarbon::parse($request->end_date);
+        $totalDaysRequested = $startDate->diffInDays($endDate) + 1; // Include the start date
+        if($totalDaysRequested <= $available_leaves){
+            $new_leave = new Leave();
+            $new_leave->leave_type = $request->leave_type;
+            $new_leave->start_date = $request->start_date;
+            $new_leave->end_date = $request->end_date;
+            $new_leave->total_days_requested = $totalDaysRequested;
+            $new_leave->designation = $request->designation;
+            $new_leave->standin_staff = $request->standin_staff;
+            $new_leave->comment = $request->comment;
+            $new_leave->user_id = Auth::user()->id;
+            $new_leave->save();
+            return redirect()->route('home')->with('success', 'Leave applied successfully.');
+        }elseif($user->role_id == config('roles.SUPER_ADMIN')){
+            $new_leave = new Leave();
+            $new_leave->leave_type = $request->leave_type;
+            $new_leave->start_date = $request->start_date;
+            $new_leave->end_date = $request->end_date;
+            $new_leave->total_days_requested = $totalDaysRequested;
+            $new_leave->designation = $request->designation;
+            $new_leave->standin_staff = $request->standin_staff;
+            $new_leave->comment = $request->comment;
+            $new_leave->user_id = Auth::user()->id;
+            $new_leave->save();
+            return redirect()->route('home')->with('success', 'Leave applied successfully.');
+        }else{
+            return redirect()->back()->with('message', 'Sorry: You have exhausted your available leaves.');
+        }
     }
 
     /**
@@ -162,5 +203,20 @@ class LeaveController extends Controller
         $leave_applications = Leave::where('user_id', $user->id)->get();
         }
         return view('pending-request', compact(['leave_applications', 'superAdmin', 'admin', 'hod', 'user']));
+    }
+
+    public function approvalNote(Leave $leave){
+        $user = Auth::user();
+        if($user->role_id == config('roles.ADMIN') || $user->role_id == config('roles.SUPER_ADMIN'))
+        {
+            $this->authorize('viewAny', Leave::class);
+        }elseif ($user->role_id == config('roles.HOD')) {
+            $leave_applications = Leave::whereHas('user', function($query) use ($user) {
+                $query->where('department', $user->department);
+            })->get();
+        }else{
+            $this->authorize('view', $leave);
+        }
+        return view('approval-note', compact('leave'));
     }
 }

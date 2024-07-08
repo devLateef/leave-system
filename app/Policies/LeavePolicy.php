@@ -47,7 +47,7 @@ class LeavePolicy
      */
     public function delete(User $user, Leave $leave): bool
     {
-        //
+        return false;
     }
 
     /**
@@ -55,7 +55,7 @@ class LeavePolicy
      */
     public function restore(User $user, Leave $leave): bool
     {
-        //
+        return false;
     }
 
     /**
@@ -63,6 +63,6 @@ class LeavePolicy
      */
     public function forceDelete(User $user, Leave $leave): bool
     {
-        //
+        return false;
     }
 }

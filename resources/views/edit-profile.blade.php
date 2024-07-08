@@ -30,11 +30,21 @@
                         </div>
                         <div class="col-12 col-md-12 col-lg-12">
                             <div class="card">
-                                <form method="post" class="needs-validation" novalidate="">
+                                <form method="post" class="needs-validation" novalidate="" action="{{route('profile.update-user', $user->id)}}">
+                                    @csrf
+                                    @method('PUT')
                                     <div class="card-header">
                                         <h4>Edit Profile</h4>
                                     </div>
                                     <div class="card-body">
+                                        @if (session('success'))
+                                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                            {{ session('success') }}
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        @endif
                                         <div class="row">
                                             <div class="form-group col-md-6 col-12">
                                                 <label>First Name</label>
