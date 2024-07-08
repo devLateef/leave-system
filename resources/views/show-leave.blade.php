@@ -2,6 +2,7 @@
 
 @section('content')
 <div id="app">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <div class="main-wrapper">
         <div class="navbar-bg"></div>
         <div class="main-sidebar sidebar-style-2">
@@ -133,7 +134,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        @if($leave->final_approval == 'Approved')
+                                        @if($leave->final_approval == 'Approved' && $leave->user_id == Auth::user()->id)
                                         <div class="row">
                                             <div>
                                                 <a href="{{route('leaves.approval', $leave->id)}}" class="btn btn-success float-right">Click Here for Approval Note</a>
@@ -148,11 +149,11 @@
                                         <button type="button"
                                             class="btn btn-primary bg-success mt-2 col-lg-2 col-md-5 col-12"
                                             data-bs-toggle="modal"
-                                            data-bs-target="#approveModal">Approve Request</button>
+                                            data-bs-target="#approveModal" id="approve_btn">Approve Request</button>
                                         <button type="button"
                                             class="btn btn-primary bg-warning mt-2 col-lg-2 col-md-5 col-12"
                                             data-bs-toggle="modal"
-                                            data-bs-target="#deferModal">Defer Request</button>
+                                            data-bs-target="#deferModal" id="defer_btn">Defer Request</button>
                                         <button type="button"
                                             class="btn btn-primary bg-danger mt-2 col-lg-2 col-md-5 col-12"
                                             data-bs-toggle="modal"
@@ -264,28 +265,23 @@
                                     </div>
                                 </div>
                             </div>
-                            <form method="POST" action="{{route('comments.approve')}}">
+                            <form method="POST" action="{{route('comments.approve')}}" id="approveForm">
                                 @csrf
                                 <div class="mb-3">
-                                    <label for="recipient-name" class="col-form-label">Approve Start
-                                        Date:</label>
-                                    <input type="date" class="form-control"
-                                        id="approved_start_date" name="start_date">
+                                    <label for="approve_start_date" class="col-form-label">Approve Start Date:</label>
+                                    <input type="date" class="form-control date-input" id="approve_start_date" name="start_date">
                                 </div>
                                 <div class="mb-3">
-                                    <label for="recipient-name" class="col-form-label">Approve End
-                                        Date:</label>
-                                    <input type="date" class="form-control" id="approved_end_date" name="end_date">
+                                    <label for="approve_end_date" class="col-form-label">Approve End Date:</label>
+                                    <input type="date" class="form-control date-input" id="approve_end_date" name="end_date">
                                 </div>
                                 <div class="mb-3">
-                                    <label for="message-text"
-                                        class="col-form-label">Message:</label>
-                                    <textarea class="form-control" id="message-text" name="message"></textarea>
+                                    <label for="approve_message" class="col-form-label">Message:</label>
+                                    <textarea class="form-control" id="approve_message" name="message"></textarea>
                                 </div>
-                                <input type="number" class="form-control d-none" id="leave_id" value="{{$leave->id}}" name="leave_id">
+                                <input type="hidden" id="approve_leave_id" name="leave_id" value="{{$leave->id}}">
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary bg-danger"
-                                        data-bs-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-secondary bg-danger" data-bs-dismiss="modal">Close</button>
                                     <button type="submit" class="btn btn-primary">Okay</button>
                                 </div>
                             </form>
@@ -394,28 +390,23 @@
                                     </div>
                                 </div>
                             </div>
-                            <form method="POST" action="{{route('comments.defer')}}">
+                            <form method="POST" action="{{route('comments.defer')}}" id="deferForm">
                                 @csrf
                                 <div class="mb-3">
-                                    <label for="recipient-name" class="col-form-label">Defer Start
-                                        Date:</label>
-                                    <input type="date" class="form-control"
-                                        id="approved_start_date" name="start_date">
+                                    <label for="approve_start_date" class="col-form-label">Approve Start Date:</label>
+                                    <input type="date" class="form-control date-input" id="approve_start_date" name="start_date">
                                 </div>
                                 <div class="mb-3">
-                                    <label for="recipient-name" class="col-form-label">Defer End
-                                        Date:</label>
-                                    <input type="date" class="form-control" id="approved_end_date" name="end_date">
+                                    <label for="approve_end_date" class="col-form-label">Approve End Date:</label>
+                                    <input type="date" class="form-control date-input" id="approve_end_date" name="end_date">
                                 </div>
-                                <input type="number" class="form-control d-none" id="leave_id" value="{{$leave->id}}" name="leave_id">
                                 <div class="mb-3">
-                                    <label for="message-text"
-                                        class="col-form-label">Reason:</label>
-                                    <textarea class="form-control" id="message-text" name="message"></textarea>
+                                    <label for="approve_message" class="col-form-label">Message:</label>
+                                    <textarea class="form-control" id="approve_message" name="message"></textarea>
                                 </div>
+                                <input type="hidden" id="approve_leave_id" name="leave_id" value="{{$leave->id}}">
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary bg-danger"
-                                        data-bs-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-secondary bg-danger" data-bs-dismiss="modal">Close</button>
                                     <button type="submit" class="btn btn-primary">Okay</button>
                                 </div>
                             </form>
@@ -545,4 +536,55 @@
         @include('layouts.footer')
     </div>
 </div>
+<script>
+    function disableWeekends(date) {
+        var day = date.getDay();
+        return (day !== 0 && day !== 6); // Sunday = 0, Saturday = 6
+    }
+
+        $(document).ready(function() {
+            var today = new Date().toISOString().split('T')[0];
+
+            // Set the minimum date for all date inputs
+            $('.date-input').attr('min', today);
+
+            // Ensure the end date is always after the start date
+            $('#approve_start_date').on('change', function() {
+                var startDate = $(this).val();
+                $('#approve_end_date').attr('min', startDate);
+            });
+
+            $('input[type="date"]').each(function() {
+                $(this).attr('onfocus', 'this.blur();'); // Prevent manual typing
+
+                $(this).on('change', function() {
+                    var inputDate = new Date($(this).val());
+                    if (!disableWeekends(inputDate)) {
+                        alert('Weekends are not allowed.');
+                        $(this).val(''); // Clear the invalid date
+                    }
+                });
+            });
+
+            // Validate form submission
+            $('#approveForm').on('submit', function(event) {
+                var startDate = new Date($('#approve_start_date').val());
+                var endDate = new Date($('#approve_end_date').val());
+
+                if (!disableWeekends(startDate) || !disableWeekends(endDate)) {
+                    alert('Weekends are not allowed.');
+                    event.preventDefault(); // Prevent form submission
+                }
+            });
+            $('#deferForm').on('submit', function(event) {
+                var startDate = new Date($('#approve_start_date').val());
+                var endDate = new Date($('#approve_end_date').val());
+
+                if (!disableWeekends(startDate) || !disableWeekends(endDate)) {
+                    alert('Weekends are not allowed.');
+                    event.preventDefault(); // Prevent form submission
+                }
+            });
+        });
+</script>
 @endsection

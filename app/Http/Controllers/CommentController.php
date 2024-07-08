@@ -61,8 +61,8 @@ class CommentController extends Controller
         }
 
         // Retrieving the associated leave and updating its status
-        // $leave = Leave::find($request->leave_id);
-        $leave = $new_comment->leave;
+        $leave = Leave::find($request->leave_id);
+        // $leave = $new_comment->leave;
         if($leave){
             if($user->role_id == env('HOD')){
                 $leave->hod_approval = 'Approved';

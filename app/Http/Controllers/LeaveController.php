@@ -34,7 +34,7 @@ class LeaveController extends Controller
     public function store(Request $request)
     {
         $user = Auth::user();
-        $available_leaves = $user->available_leaves;
+        $leave_balance = $user->leave_balance;
         $request->validate([
             'start_date' => ['required', 'date', function($attribute, $value, $fail) {
                 $dayOfWeek = SupportCarbon::parse($value)->dayOfWeek;
@@ -57,7 +57,7 @@ class LeaveController extends Controller
         $startDate = SupportCarbon::parse($request->start_date);
         $endDate = SupportCarbon::parse($request->end_date);
         $totalDaysRequested = $startDate->diffInDays($endDate) + 1; // Include the start date
-        if($totalDaysRequested <= $available_leaves){
+        if($totalDaysRequested <= $leave_balance){
             $new_leave = new Leave();
             $new_leave->leave_type = $request->leave_type;
             $new_leave->start_date = $request->start_date;
@@ -82,7 +82,7 @@ class LeaveController extends Controller
             $new_leave->save();
             return redirect()->route('home')->with('success', 'Leave applied successfully.');
         }else{
-            return redirect()->back()->with('message', 'Sorry: You have exhausted your available leaves.');
+            return redirect()->back()->with('message', __('Sorry: You have :leave_balance available leaves.', ['leave_balance' => $leave_balance]));
         }
     }
 
