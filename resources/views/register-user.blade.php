@@ -138,28 +138,5 @@
             event.preventDefault(); // Prevent form submission
         }
     });
-    
-    // // Create a new Headers object
-    // var headers = new Headers();
-    // headers.append("X-CSCAPI-KEY", "API_KEY");  // Replace with your actual API key
-
-    // // Set the request options
-    // var requestOptions = {
-    //     method: 'GET',
-    //     headers: headers,
-    //     redirect: 'follow'
-    // };
-
-    // // Perform the fetch request
-    // fetch("https://api.countrystatecity.in/v1/countries/IN/states", requestOptions)
-    //     .then(response => {
-    //         // Check if the response status is OK (status 200-299)
-    //         if (!response.ok) {
-    //             throw new Error('Network response was not ok ' + response.statusText);
-    //         }
-    //         return response.json(); // Parse the JSON from the response
-    //     })
-    //     .then(result => console.log(result)) // Log the result to the console
-    //     .catch(error => console.log('Fetch error: ', error)); // Log any errors that occur
 </script>
 @endsection

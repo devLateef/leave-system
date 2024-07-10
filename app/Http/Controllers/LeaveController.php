@@ -8,6 +8,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon as SupportCarbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Yajra\DataTables\Facades\DataTables;
 
 class LeaveController extends Controller
 {
@@ -219,4 +221,87 @@ class LeaveController extends Controller
         }
         return view('approval-note', compact('leave'));
     }
+
+    public function getLeaveApplications(Request $request)
+    {
+        $user = auth()->user();
+        $superAdmin = config('roles.SUPER_ADMIN');
+        $admin = config('roles.ADMIN');
+        $hod = config('roles.HOD');
+    
+        // Base query with join
+        $query = Leave::select([
+                'leaves.id',
+                'leaves.leave_type',
+                'leaves.start_date',
+                'leaves.end_date',
+                'leaves.hod_approval',
+                'leaves.final_approval',
+                'users.first_name',
+                'users.last_name',
+                'users.role_id',
+            ])
+            ->join('users', 'leaves.user_id', '=', 'users.id');
+    
+        // Modify query based on user role
+        if ($user->role_id == $superAdmin) {
+            // SuperAdmin can see all leave applications
+        } elseif ($user->role_id == $admin) {
+            // Admin can see leave applications excluding role_id = 4
+            $query->where('users.role_id', '!=', 4);
+        } elseif ($user->role_id == $hod) {
+            // HOD can see leave applications of their department
+            $query->whereHas('user', function($q) use ($user) {
+                $q->where('department', $user->department);
+            });
+        } else {
+            // Other users can see only their own leave applications
+            $query->where('user_id', $user->id);
+        }
+    
+        // Ensure data is ordered by created_at in descending order
+        $query->orderBy('leaves.created_at', 'desc');
+    
+        return DataTables::of($query)
+            ->filter(function ($query) use ($request) {
+                if ($request->has('search') && !empty($request->input('search')['value'])) {
+                    $searchValue = $request->input('search')['value'];
+    
+                    // Applying search filter
+                    $query->where(function ($q) use ($searchValue) {
+                        $q->where('users.first_name', 'like', '%' . $searchValue . '%')
+                            ->orWhere('users.last_name', 'like', '%' . $searchValue . '%')
+                            ->orWhere('leaves.leave_type', 'like', '%' . $searchValue . '%');
+                    });
+                }
+            })
+            ->addIndexColumn() // This automatically handles the numbering in ascending order
+            ->addColumn('full_name', function($row) {
+                return $row->first_name . ' ' . $row->last_name;
+            })
+            ->addColumn('hod_approval', function($row) {
+                $class = $row->hod_approval == 'Approved' ? 'text-success' : ($row->hod_approval == 'Defered' ? 'text-warning' : ($row->hod_approval == 'Pending' ? 'text-warning' : 'text-danger'));
+                return '<span class="fw-bold '.$class.'">'.$row->hod_approval.'</span>';
+            })
+            ->addColumn('final_approval', function($row) {
+                $class = $row->final_approval == 'Approved' ? 'text-success' : ($row->final_approval == 'Defered' ? 'text-warning' : ($row->final_approval == 'Pending' ? 'text-warning' : 'text-danger'));
+                return '<span class="fw-bold '.$class.'">'.$row->final_approval.'</span>';
+            })
+            ->addColumn('action', function($row) use ($user, $superAdmin, $admin, $hod) {
+                $buttons = '';
+    
+                if ($user->role_id == $superAdmin || $user->role_id == $admin || $user->role_id == $hod) {
+                    $buttons .= '<a href="'.route('leaves.show', $row->id).'"><button class="btn btn-primary m-2">Show Details</button></a>';
+                } elseif ($row->hod_approval == 'Pending' || $row->final_approval == 'Pending') {
+                    $buttons .= '<a href="'.route('leaves.show', $row->id).'"><button class="btn btn-primary mb-1 mt-1">Show</button></a>';
+                    $buttons .= '<a href="'.route('leaves.edit', $row->id).'"><button class="btn btn-danger mb-1">Edit</button></a>';
+                } else {
+                    $buttons .= '<a href="'.route('leaves.show', $row->id).'"><button class="btn btn-primary mb-1 mt-1">Show</button></a>';
+                }
+    
+                return $buttons;
+            })
+            ->rawColumns(['full_name', 'hod_approval', 'final_approval', 'action'])
+            ->make(true);
+        }
 }

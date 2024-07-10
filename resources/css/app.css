@@ -1,0 +1,26 @@
+/* Custom styles for DataTables pagination buttons */
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    background-color: #007bff; /* Change to your preferred background color */
+    color: white; /* Change to your preferred text color */
+    border: none;
+    padding: 5px 10px;
+    margin: 0 2px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+    background-color: #0056b3; /* Change to your preferred hover background color */
+    color: white; /* Change to your preferred hover text color */
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+    background-color: #0056b3; /* Change to your preferred active button background color */
+    color: white; /* Change to your preferred active button text color */
+}
+
+/* Adjust alignment and spacing */
+.dataTables_wrapper .dataTables_paginate {
+    text-align: center;
+    margin-top: 20px;
+}

@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Department;
+use App\Models\Leave;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Ozdemir\Datatables\Datatables;
+use Ozdemir\Datatables\DB\LaravelAdapter;
 
 class UserController extends Controller
 {
@@ -50,6 +53,9 @@ class UserController extends Controller
         return redirect(route('home'));
     }
 
+    public function showUserDetail(User $user){
+        return view('show-user', compact('user'));
+    }
     /**
      * Display the specified resource.
      */
@@ -104,7 +110,21 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        //
+     // Find all leaves associated with the user
+        $leaves = Leave::where('user_id', $user->id)->get();
+
+        foreach ($leaves as $leave) {
+            // Delete comments associated with each leave
+            $leave->comments()->delete();
+        }
+    
+        // Delete all leaves associated with the user
+        Leave::where('user_id', $user->id)->delete();
+    
+        // Now delete the user
+        $user->delete();
+    
+        return redirect(route('home'));
     }
 
     public function createpass(){
@@ -197,10 +217,44 @@ class UserController extends Controller
             $users = User::where('role_id', '!=', 4)->get();
             return view('all-users', compact('users'));
         }
+        return view('all-users', compact('users'));
     }
 
     public function getAllHods(){
         $hods = Department::whereNotNull('hod_id')->with('user')->get();
         return view('all-hods', compact('hods'));
+    }
+
+    public function getUsers()
+    {
+        $user = auth()->user();
+        $sqlBuilder = User::select([
+            'id',
+            'first_name',
+            'last_name',
+            'staff_id',
+            'department',
+            'gender',
+        ]);
+
+        if ($user->role_id == 2) { // Assuming 2 is the role ID for HOD
+            // Get the department where the user is the HOD
+            $department = Department::where('hod_id', $user->id)->first();
+
+            if ($department) {
+                // Fetch all users in the HOD's department
+                $sqlBuilder->where('department', $department->department);
+            } else {
+                // Handle the case where the HOD has no department
+                return response()->json(['error' => 'You are not assigned to any department.'], 403);
+            }
+        } else {
+            // Fetch all users excluding those with role_id = 4
+            $sqlBuilder->where('role_id', '!=', 4);
+        }
+
+        $dt = new Datatables(new LaravelAdapter);
+        $dt->query($sqlBuilder);
+        return $dt->generate();
     }
 }

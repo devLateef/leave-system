@@ -80,9 +80,7 @@
                         </form>
                     </div>
                 </div>
-                <div class="simple-footer">
-                    Copyright &copy; Lateef 2024
-                </div>
+                @include('layouts.footer')
             </div>
         </div>
     </div>

@@ -2,6 +2,52 @@
 
 @section('content')
 <div id="app">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <style>
+    .dataTables_wrapper .dataTables_paginate .paginate_button {
+        background-color: #2983e9;
+        color: white;
+        border: none;
+        padding: 5px 10px !important;
+        margin: 0 4px !important;
+        cursor: pointer;
+        border-radius: 4px;
+    }
+    .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+    background-color: #0056b3;
+    color: white;
+    }
+    .dataTables_wrapper .dataTables_paginate {
+    text-align: center;
+    margin-top: 20px !important;
+    }
+    .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+        background-color: #0056b3;
+        color: white;
+    }
+    /* Style the DataTable search bar */
+    .dataTables_filter {
+        text-align: left; /* Align the search bar to the left */
+        margin-bottom: 15px; /* Add space below the search bar */
+    }
+    .dataTables_filter label {
+    font-weight: bold !important; /* Make the label bold */
+    color: #333 !important; /* Change label color */
+    }
+    .dataTables_filter input {
+    width: 300px; /* Set a fixed width */
+    padding: 10px; /* Add padding */
+    border: 1px solid #ddd; /* Add border */
+    border-radius: 10px; /* Round the corners */
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Add subtle shadow */
+    outline: none; /* Remove default outline */
+    transition: all 0.3s ease; /* Smooth transition */
+    }
+    .dataTables_filter input:focus {
+    border-color: #007BFF; /* Change border color on focus */
+    box-shadow: 0px 2px 5px rgba(0, 123, 255, 0.5); /* Change shadow on focus */
+    }
+    </style>
     <div class="main-wrapper">
         @include('layouts.navbar')
         <div class="navbar-bg"></div>
@@ -84,7 +130,7 @@
                     </div>
                 </div> --}}
             </section>
-            <table class="table table-striped table-hover table-responsive-md">
+            <table id="usersTable" class="table table-striped table-hover table-responsive-md">
                 <thead class="table-primary">
                     <tr>
                         <th scope="col">S/N</th>
@@ -106,10 +152,7 @@
                         <td>{{$user->staff_id}}</td>
                         <td>{{$user->department}}</td>
                         <td>{{$user->gender}}</td>
-                        <td>
-                            <a href="#"><button class="btn btn-primary mb-1 mt-1">Show</button></a>
-                            <a href="#"><button class="btn btn-danger mb-1">Delete</button></a>
-                        </td>
+                        {{-- <td>Rendering this data dynamically with javascript</td> --}}
                     </tr>
                     @endforeach
                     @else
@@ -123,4 +166,36 @@
         @include('layouts.footer')
     </div>
 </div>
+<script>
+    $(document).ready(function () {
+    $('#usersTable').dataTable({
+        "serverSide": true,
+        "responsive": true,
+        "ajax": "{{route('profile.users')}}",
+        columns: [
+            { data: null, name: 'sn' },
+            { data: 'first_name', name: 'first_name' },
+            { data: 'last_name', name: 'last_name' },
+            { data: 'staff_id', name: 'staff_id' },
+            { data: 'department', name: 'department' },
+            { data: 'gender', name: 'gender' },
+            {
+                render: function(data, type, row) {
+                // Construct the URL with the user ID dynamically
+                var url = '{{ route("profile.user-detail", ":id") }}';
+                url = url.replace(':id', row.id);
+                
+                return '<td><a href="' + url + '"><button class="btn btn-primary m-1">Show</button></a></td>';
+                },
+                orderable: false,
+                searchable: false
+            }
+        ],
+        createdRow: function (row, data, index) {
+                    // Add serial number
+                    $('td', row).eq(0).html(index + 1 + this.api().page.info().start);
+                    }
+    });
+});
+</script>
 @endsection

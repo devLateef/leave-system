@@ -59,6 +59,7 @@ Route::prefix('leaves')->middleware('auth')->group(function () {
     Route::get('/show/{leave}', [LeaveController::class, 'show'])->name('leaves.show');
     Route::get('/show/{leave}/approval', [LeaveController::class, 'approvalNote'])->name('leaves.approval');
     Route::get('/active', [LeaveController::class, 'approved'])->name('leaves.active');
+    Route::get('/data', [LeaveController::class, 'getLeaveApplications'])->name('leaves.data');
     Route::get('/defered', [LeaveController::class, 'defered'])->name('leaves.defered');
     Route::get('/declined', [LeaveController::class, 'declined'])->name('leaves.declined');
     Route::get('/pending', [LeaveController::class, 'pending'])->name('leaves.pending');
@@ -80,6 +81,7 @@ Route::prefix('profile')->middleware('auth')->group(function () {
     Route::get('/password', [UserController::class, 'createpass'])->name('profile.change');
     Route::put('/password/{user}', [UserController::class, 'updatePass'])->name('profile.update-password');
     Route::put('/user/{user}', [UserController::class, 'update'])->name('profile.update-user');
+    Route::get('/user-detail/{user}', [UserController::class, 'showUserDetail'])->name('profile.user-detail');
     Route::get('/users', [UserController::class, 'getAllUsers'])->name('profile.all-users');
     Route::get('/hods', [UserController::class, 'getAllHods'])->name('profile.all-hods');
     Route::get('/users/{department}', [UserController::class, 'getUsersByDepartment']);
@@ -89,4 +91,6 @@ Route::prefix('profile')->middleware('auth')->group(function () {
     Route::get('/make-admin', [UserController::class, 'getAdminDepartment'])->name('profile.make-admin');
     Route::post('/store', [UserController::class, 'store'])->name('profile.store');
     Route::get('/create', [UserController::class, 'create'])->name('profile.create');
+    Route::get('/data/user', [UserController::class, 'getUsers'])->name('profile.users');
+    Route::delete('/delete/{user}', [UserController::class, 'destroy'])->name('profile.delete');
 });
