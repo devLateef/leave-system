@@ -546,10 +546,10 @@
     }
 
         $(document).ready(function() {
-            var today = new Date().toISOString().split('T')[0];
+            var expected_start_date = '{{ $leave->start_date }}';
 
             // Set the minimum date for all date inputs
-            $('.date-input').attr('min', today);
+            $('.date-input').attr('min', expected_start_date);
 
             // Ensure the end date is always after the start date
             $('#approve_start_date').on('change', function() {
