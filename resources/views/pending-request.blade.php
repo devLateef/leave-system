@@ -16,7 +16,7 @@
 
             @if($user->role_id == $superAdmin)
             <!-- Admin view: Show all deferred leave applications -->
-            <table class="table table-striped table-hover">
+            <table class="table table-striped table-hover table-responsive-md">
                 <thead class="table-primary">
                     <tr>
                         <th scope="col">S/N</th>
@@ -45,13 +45,13 @@
                         @endforeach
                     @else
                         <tr scope="row">
-                            <td colspan="6">No Record Found</td>
+                            <td colspan="7">No Record Found</td>
                         </tr>
                     @endif
                 </tbody>
             </table>
             @elseif($user->role_id == $admin)
-            <table class="table table-striped table-hover">
+            <table class="table table-striped table-hover table-responsive-md">
                 <thead class="table-primary">
                     <tr>
                         <th scope="col">S/N</th>
@@ -80,14 +80,14 @@
                         @endforeach
                     @else
                         <tr scope="row">
-                            <td colspan="6">No Record Found</td>
+                            <td colspan="7">No Record Found</td>
                         </tr>
                     @endif
                 </tbody>
             </table>
             @elseif($user->role_id == $hod)
             <!-- HOD view: Show deferred leave applications of users in the same department -->
-            <table class="table table-striped table-hover">
+            <table class="table table-striped table-hover table-responsive-md">
                 <thead class="table-primary">
                     <tr>
                         <th scope="col">S/N</th>
@@ -118,14 +118,14 @@
                         @endforeach
                     @else
                         <tr scope="row">
-                            <td colspan="6">No Record Found</td>
+                            <td colspan="7">No Record Found</td>
                         </tr>
                     @endif
                 </tbody>
             </table>
             @else
             <!-- User view: Show only user's own deferred leave applications -->
-            <table class="table table-striped table-hover">
+            <table class="table table-striped table-hover table-responsive-md">
                 <thead class="table-primary">
                     <tr>
                         <th scope="col">S/N</th>
@@ -156,7 +156,7 @@
                         @endforeach
                     @else
                         <tr scope="row">
-                            <td colspan="6">No Record Found</td>
+                            <td colspan="7">No Record Found</td>
                         </tr>
                     @endif
                 </tbody>

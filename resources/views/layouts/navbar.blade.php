@@ -13,25 +13,46 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <!-- Left Side Of Navbar -->
-            <ul class="navbar-nav md-auto">
+            <ul class="navbar-nav md-auto d-lg-none d-xl-none d-md-inline d-sm-inline">
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link has-dropdown text-body" data-toggle="dropdown"><i
+                            class="fa fa-columns"></i> <span>Leave Management</span></a>
+                    <ul class="dropdown-menu" style="display: none;">
+                        <li><a class="nav-link" href="{{route('leaves.apply')}}">Request for Leave</a></li>
+                        <li><a class="nav-link" href="{{route('leaves.active')}}">Approved Leaves</a></li>
+                        <li><a class="nav-link" href="{{route('leaves.defered')}}">Deferred Leaves</a></li>
+                        <li><a class="nav-link" href="{{route('leaves.declined')}}">Declined Leaves</a></li>
+                        <li><a class="nav-link" href="{{route('leaves.pending')}}">Pending Leaves</a></li>
+                    </ul>
+                </li>
+                @if(Auth::check() && Auth::user()->role_id == config('roles.ADMIN') || Auth::user()->role_id == config('roles.SUPER_ADMIN') || Auth::user()->role_id == config('roles.HOD'))
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link has-dropdown text-body" data-toggle="dropdown"><i
+                            class="fa fa-user"></i>
+                        <span>User Management</span></a>
+                    <ul class="dropdown-menu" style="display: none;">
+                        @if(Auth::user()->role_id == config('roles.HOD'))
+                        <li><a class="nav-link" href="{{route('profile.all-users')}}">Fetch All Users</a></li>
+                        @elseif(Auth::user()->role_id == config('roles.SUPER_ADMIN'))
+                        <li><a class="nav-link" href="{{route('profile.create')}}">Add New User</a></li>
+                        <li><a class="nav-link" href="{{route('profile.assign')}}">Assign HOD</a></li>
+                        <li><a class="nav-link" href="{{route('profile.make-admin')}}">Assign Admin</a></li>
+                        <li><a class="nav-link" href="{{route('profile.all-hods')}}">Fetch All HOD(s)</a></li>
+                        <li><a class="nav-link" href="{{route('profile.all-users')}}">Fetch All Users</a></li>
+                        @else
+                        <li><a class="nav-link" href="{{route('profile.create')}}">Add New User</a></li>
+                        <li><a class="nav-link" href="{{route('profile.assign')}}">Assign HOD</a></li>
+                        <li><a class="nav-link" href="{{route('profile.all-hods')}}">Fetch All HOD(s)</a></li>
+                        <li><a class="nav-link" href="{{route('profile.all-users')}}">Fetch All Users</a></li>
+                        @endif
+                    </ul>
+                </li>
+                @endif
             </ul>
 
             <!-- Right Side Of Navbar -->
-            <ul class="navbar-nav ms-auto">
+            <ul class="navbar-nav ms-auto d-md-inline d-sm-inline">
                 <!-- Authentication Links -->
-                @guest
-                @if (Route::has('login'))
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                </li>
-                @endif
-
-                @if (Route::has('register'))
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                </li>
-                @endif
-                @else
                 <li class="dropdown mr-5">
                     <a href="#" data-toggle="dropdown"
                         class="nav-link dropdown-toggle nav-link-lg nav-link-user">
@@ -40,7 +61,7 @@
                         <div class="d-sm-none d-lg-inline-block text-body">{{ Auth::user()->first_name }}
                         </div>
                     </a>
-                    <div class="dropdown-menu dropdown-menu-right">
+                    <div class="dropdown-menu dropdown-menu-right">  
                         <a href="{{route('profile.show')}}" class="dropdown-item has-icon">
                             <i class="far fa-user"></i> Profile
                         </a>
@@ -56,41 +77,36 @@
                                         document.getElementById('logout-form').submit();">
                             <i class="fas fa-sign-out-alt"></i> {{ __('Logout') }}
                         </a>
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST"
-                            class="d-none">
-                            @csrf
-                        </form>
                     </div>
                 </li>
-                {{-- <li class="nav-item dropdown">
-                    <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
-                        data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                        {{ Auth::user()->name }}
-                    </a>
-
-                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item hoverable" href="#">
-                            View Profile
-                        </a>
-                        <a class="dropdown-item" href="#">
-                            Edit Profile
-                        </a>
-                        <a class="dropdown-item" href="{{ route('logout') }}"
-                            onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                            {{ __('Logout') }}
-                        </a>
-
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST"
-                            class="d-none">
-                            @csrf
-                        </form>
-                    </div>
-                </li> --}}
-                @endguest
             </ul>
         </div>
     </div>
+    {{-- <div class="modal fade" id="approveModal" tabindex="-1"
+                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Complete the form
+                                to Approve</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="form-group col-md-6 col-12">
+                                    <dt>Expected Start Date</dt>
+                                    
+                                </div>
+                                <div class="form-group col-md-6 col-12">
+                                    <dt>Expected End Date</dt>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    </div> --}}
 </nav>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.min.js"></script>
