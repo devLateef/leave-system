@@ -117,15 +117,44 @@ class LeaveController extends Controller
      */
     public function update(Request $request, Leave $leave)
     {
-        $leave->leave_type = $request->leave_type;
-        $leave->start_date = $request->start_date;
-        $leave->end_date = $request->end_date;
-        $leave->designation = $request->designation;
-        $leave->standin_staff = $request->standin_staff;
-        $leave->comment = $request->comment;
-        $leave->user_id = Auth::user()->id;
-        $leave->save();
-        return redirect(route('home'))->with('success', 'Leave Updated Successfully');
+        $user = Auth::user();
+        $leave_balance = $user->leave_balance;
+        $request->validate([
+            'start_date' => ['required', 'date', function($attribute, $value, $fail) {
+                $dayOfWeek = SupportCarbon::parse($value)->dayOfWeek;
+                if ($dayOfWeek == SupportCarbon::SUNDAY || $dayOfWeek == SupportCarbon::SATURDAY) {
+                    $fail('The start date cannot be a weekend.');
+                }
+            }],
+            'end_date' => ['required', 'date', function($attribute, $value, $fail) {
+                $dayOfWeek = SupportCarbon::parse($value)->dayOfWeek;
+                if ($dayOfWeek == SupportCarbon::SUNDAY || $dayOfWeek == SupportCarbon::SATURDAY) {
+                    $fail('The end date cannot be a weekend.');
+                }
+            }],
+            'designation' => 'required|string',
+            'standin_staff' => 'required|string',
+            'comment' => 'required|string'
+        ]);
+
+        // Calculate total days requested
+        $startDate = SupportCarbon::parse($request->start_date);
+        $endDate = SupportCarbon::parse($request->end_date);
+        $totalDaysRequested = $startDate->diffInDays($endDate) + 1; // Include the start date
+        if($totalDaysRequested <= $leave_balance){
+            $leave->leave_type = $request->leave_type;
+            $leave->start_date = $request->start_date;
+            $leave->end_date = $request->end_date;
+            $leave->total_days_requested = $totalDaysRequested;
+            $leave->designation = $request->designation;
+            $leave->standin_staff = $request->standin_staff;
+            $leave->comment = $request->comment;
+            $leave->user_id = Auth::user()->id;
+            $leave->save();
+            return redirect(route('home'))->with('success', 'Leave Updated Successfully');
+        }else{
+            return redirect()->back()->with('message', __('Sorry: You have :leave_balance Available Leaves.', ['leave_balance' => $leave_balance]));
+        }
     }
 
     /**

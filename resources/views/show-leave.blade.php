@@ -146,6 +146,9 @@
                                     || Auth::user()->role_id == config('roles.SUPER_ADMIN') || 
                                     Auth::user()->role_id == config('roles.HOD'))
                                     <div class="d-lg-flex d-md-flex justify-content-between">
+                                        @if(Auth::id() == $leave->user_id && $leave->final_approval == 'Pending')
+                                        <a href="{{route('leaves.edit', $leave->id)}}" class="btn btn-primary bg-info mt-2 col-lg-1 col-md-5 col-12 w-25 text-white">Edit</a>
+                                        @endif
                                         <button type="button"
                                             class="btn btn-primary bg-success mt-2 col-lg-2 col-md-5 col-12"
                                             data-bs-toggle="modal"
