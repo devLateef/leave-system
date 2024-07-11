@@ -2,13 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Comment;
 use App\Models\Leave;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon as SupportCarbon;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 
 class LeaveController extends Controller
@@ -128,7 +125,7 @@ class LeaveController extends Controller
         $leave->comment = $request->comment;
         $leave->user_id = Auth::user()->id;
         $leave->save();
-        return redirect(route('home'));
+        return redirect(route('home'))->with('success', 'Leave Updated Successfully');
     }
 
     /**

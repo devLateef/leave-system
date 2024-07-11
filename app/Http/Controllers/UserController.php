@@ -50,6 +50,7 @@ class UserController extends Controller
         $new_user->country = $request->country;
         $new_user->address = $request->address;
         $new_user->save();
+        toastr()->success('success', 'New User Created Successfully');
         return redirect(route('home'));
     }
 
@@ -124,7 +125,7 @@ class UserController extends Controller
         // Now delete the user
         $user->delete();
     
-        return redirect(route('home'));
+        return redirect(route('home'))->with('success', 'User Deleted Successfully');
     }
 
     public function createpass(){
@@ -158,7 +159,7 @@ class UserController extends Controller
                 $department = Department::where('department', $request->department)->first();
                 $department->hod_id = $user->id;
                 $department->save();
-                return redirect(route('home'));
+                return redirect(route('home'))->with('success', 'HOD Role Assigned Successfully');
             }else {
                 // If the user is not an HOD, update the user's role_id
                 $user->role_id = $request->role_id;
@@ -167,7 +168,7 @@ class UserController extends Controller
                 // Update the department record with the new HOD
                 $department->hod_id = $user->id;
                 $department->save();
-                return redirect(route('home'));
+                return redirect(route('home'))->with('success', 'HOD Role Assigned Successfully');
             }
         }else {
             // Handle the case where the user is not found
@@ -182,7 +183,7 @@ class UserController extends Controller
             if ($user->role_id == 1 || $user->role_id == 2) {
                 $user->role_id = $request->role_id;
                 $user->save();
-                return redirect(route('home'));
+                return redirect(route('home'))->with('success', 'Admin Assigned Successfully');
             }
         }else {
             // Handle the case where the user is not found

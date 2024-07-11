@@ -54,6 +54,7 @@
         @include('layouts.sidebar');
         <!-- Main Content -->
         <div class="main-content">
+            @include('partials.flash-messages')
             <section class="section">
                 <div class="section-header">
                     <h1>Dashboard</h1>

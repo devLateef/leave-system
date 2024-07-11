@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 
+
 class LoginController extends Controller
 {
     /*
@@ -50,6 +51,12 @@ class LoginController extends Controller
             'email' => 'required|string|email',
             'password' => 'required|string|min:8',
         ]);
+    }
+
+    protected function authenticated(Request $request, $user)
+    {
+        // Add flash message
+        toastr()->success('status', 'You have successfully logged in!');
     }
 
     protected function sendFailedLoginResponse(Request $request)
