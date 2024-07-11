@@ -146,7 +146,7 @@ class CommentController extends Controller
             $new_comment->message = $request->message;
             $new_comment->leave_id = $request->leave_id;
             $new_comment->user_id = Auth::user()->id;
-            $new_comment->days_givem = $totalDaysGiven;
+            $new_comment->days_given = $totalDaysGiven;
             $new_comment->save();
         }
 

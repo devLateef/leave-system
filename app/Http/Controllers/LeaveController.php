@@ -306,11 +306,11 @@ class LeaveController extends Controller
                 return $row->first_name . ' ' . $row->last_name;
             })
             ->addColumn('hod_approval', function($row) {
-                $class = $row->hod_approval == 'Approved' ? 'text-success' : ($row->hod_approval == 'Defered' ? 'text-warning' : ($row->hod_approval == 'Pending' ? 'text-warning' : 'text-danger'));
+                $class = $row->hod_approval == 'Approved' ? 'text-success' : ($row->hod_approval == 'Defered' ? 'text-info' : ($row->hod_approval == 'Pending' ? 'text-warning' : 'text-danger'));
                 return '<span class="fw-bold '.$class.'">'.$row->hod_approval.'</span>';
             })
             ->addColumn('final_approval', function($row) {
-                $class = $row->final_approval == 'Approved' ? 'text-success' : ($row->final_approval == 'Defered' ? 'text-warning' : ($row->final_approval == 'Pending' ? 'text-warning' : 'text-danger'));
+                $class = $row->final_approval == 'Approved' ? 'text-success' : ($row->final_approval == 'Defered' ? 'text-info' : ($row->final_approval == 'Pending' ? 'text-warning' : 'text-danger'));
                 return '<span class="fw-bold '.$class.'">'.$row->final_approval.'</span>';
             })
             ->addColumn('action', function($row) use ($user, $superAdmin, $admin, $hod) {
