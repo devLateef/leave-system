@@ -71,12 +71,13 @@
                         <a href="{{route('profile.change')}}" class="dropdown-item has-icon">
                             <i class="fas fa-key"></i> Change Password
                         </a>
-                        <div class="dropdown-divider"></div>
-                        <a href="{{ route('logout') }}" class="dropdown-item has-icon text-danger"
-                            onclick="event.preventDefault();
-                                        document.getElementById('logout-form').submit();">
+                        <div class="dropdown-divider"></div>         
+                        <a class="dropdown-item text-danger" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                             <i class="fas fa-sign-out-alt"></i> {{ __('Logout') }}
                         </a>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                            @csrf
+                        </form>
                     </div>
                 </li>
             </ul>
