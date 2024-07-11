@@ -67,7 +67,7 @@ class LeaveController extends Controller
             $new_leave->comment = $request->comment;
             $new_leave->user_id = Auth::user()->id;
             $new_leave->save();
-            return redirect()->route('home')->with('success', 'Leave applied successfully.');
+            return redirect()->route('home')->with('success', 'Leave Applied successfully.');
         }elseif($user->role_id == config('roles.SUPER_ADMIN')){
             $new_leave = new Leave();
             $new_leave->leave_type = $request->leave_type;
@@ -79,9 +79,9 @@ class LeaveController extends Controller
             $new_leave->comment = $request->comment;
             $new_leave->user_id = Auth::user()->id;
             $new_leave->save();
-            return redirect()->route('home')->with('success', 'Leave applied successfully.');
+            return redirect()->route('home')->with('success', 'Leave Applied successfully.');
         }else{
-            return redirect()->back()->with('message', __('Sorry: You have :leave_balance available leaves.', ['leave_balance' => $leave_balance]));
+            return redirect()->back()->with('message', __('Sorry: You have :leave_balance Available Leaves.', ['leave_balance' => $leave_balance]));
         }
     }
 

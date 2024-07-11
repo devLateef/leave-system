@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Comment;
 use App\Models\Leave;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -64,16 +65,22 @@ class CommentController extends Controller
         $leave = Leave::find($request->leave_id);
         // $leave = $new_comment->leave;
         if($leave){
-            if($user->role_id == env('HOD')){
+            if($user->role_id == config('roles.HOD')){
                 $leave->hod_approval = 'Approved';
                 $leave->save();
-            }elseif($user->role_id == env('ADMIN')){
+            }elseif($user->role_id == config('roles.ADMIN')){
                 $leave->final_approval = 'Approved';
                 $leave->save();
+                $appliedUser = User::find($leave->user_id);
+                $appliedUser->leave_balance -= $totalDaysGiven;
+                $appliedUser->save();
             }else{
                 $leave->hod_approval = 'Approved';
                 $leave->final_approval = 'Approved';
                 $leave->save();
+                $appliedUser = User::find($leave->user_id);
+                $appliedUser->leave_balance -= $totalDaysGiven;
+                $appliedUser->save();
             };
         };
         // $leave->save();

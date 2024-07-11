@@ -56,7 +56,7 @@ class LoginController extends Controller
     protected function authenticated(Request $request, $user)
     {
         // Add flash message
-        toastr()->success('status', 'You have successfully logged in!');
+        toastr()->success('You have successfully logged in!');
     }
 
     protected function sendFailedLoginResponse(Request $request)

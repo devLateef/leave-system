@@ -107,7 +107,7 @@
                                             </div>
                                             <div class="form-group col-md-6 col-12">
                                                 <dt>Leave Balance:</dt>
-                                                <dd>{{$leave->user->leave_balance - $adminComment->days_given}}</dd>
+                                                <dd>{{$leave->user->leave_balance}}</dd>
                                                 @endif
                                             </div>
                                         </div>
