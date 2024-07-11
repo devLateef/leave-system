@@ -1,5 +1,6 @@
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
-    <div class="container">
+    <div class="container ml-0">
         <a class="navbar-brand text-body" href="{{ url('/') }}">
             {{-- {{ config('app.name', 'Home') }} --}}
             Home
@@ -31,7 +32,8 @@
                 </li>
                 @endif
                 @else
-                <li class="dropdown"><a href="#" data-toggle="dropdown"
+                <li class="dropdown mr-5">
+                    <a href="#" data-toggle="dropdown"
                         class="nav-link dropdown-toggle nav-link-lg nav-link-user">
                         <img alt="image" src="{{asset('assets/img/avatar/avatar-1.png')}}"
                             class="rounded-circle mr-1">
@@ -90,3 +92,5 @@
         </div>
     </div>
 </nav>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.min.js"></script>

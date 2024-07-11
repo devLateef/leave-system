@@ -1,10 +1,8 @@
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <div class="main-sidebar sidebar-style-2">
     <aside id="sidebar-wrapper">
-        <div class="sidebar-brand sidebar-brand-sm">
-            <a href="{{route('home')}}">St</a>
-        </div>
         <ul class="sidebar-menu">
-            <li class="menu-header">Dashboard</li>
+            <li class="menu-header">Welcom to LMS</li>
             <li class="nav-item">
                 <a href="{{route('home')}}" class="nav-link text-body"><i
                         class="fa fa-fire"></i><span>Dashboard</span></a>

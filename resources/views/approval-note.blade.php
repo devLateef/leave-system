@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <div id="app">
     <style>
         /* Add your print-specific styles here */
@@ -103,7 +104,7 @@
                                         <div class="row">
                                             <div class="form-group col-md-6 col-12">
                                                 <dt>Status</dt>
-                                                <dd class="fw-bold text-left text-black {{$leave->final_approval == 'Approved' ? 'bg-secondary w-25 p-1 rounded' : ($leave->final_approval == 'Defered' ? 'bg-warning w-25 p-1 rounded' : ($leave->final_approval == 'Pending' ? 'bg-warning w-25 p-1 rounded' : 'bg-danger w-25 p-1 rounded'))}}">{{$leave->final_approval}}</dd>
+                                                <dd class="fw-bold text-left text-white {{$leave->final_approval == 'Approved' ? 'bg-success w-25 p-1 rounded' : ($leave->final_approval == 'Defered' ? 'bg-warning w-25 p-1 rounded' : ($leave->final_approval == 'Pending' ? 'bg-warning w-25 p-1 rounded' : 'bg-danger w-25 p-1 rounded'))}}">{{$leave->final_approval}}</dd>
                                             </div>
                                             <div class="form-group col-md-6 col-12">
                                                 <dt>Leave Balance:</dt>

@@ -30,7 +30,6 @@
     <link rel="stylesheet" href="{{asset('assets/css/plugins/bootstrap-tagsinput.css')}}">
     <link rel="stylesheet" href="{{asset('assets/css/plugins/bootstrap-timepicker.min.css')}}">
     <link rel="stylesheet" href="{{asset('assets/css/plugins/daterangepicker.css')}}">
-    <link rel="stylesheet" href="{{asset('assets/css/plugins/summernote-bs4.css')}}">
     <link rel="stylesheet" href="{{asset('assets/css/plugins/select2.min.css')}}">
 
     <!-- Template CSS -->

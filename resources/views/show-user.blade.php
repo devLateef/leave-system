@@ -2,6 +2,7 @@
 
 @section('content')
 <div id="app">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <div class="main-wrapper">
         <div class="navbar-bg"></div>
         <div class="main-sidebar sidebar-style-2">

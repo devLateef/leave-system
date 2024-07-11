@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <div id="app">
     <div class="main-wrapper">
         <div class="navbar-bg"></div>
@@ -14,7 +15,7 @@
                 <div class="section-header">
                     <h1>Profile</h1>
                     <div class="section-header-breadcrumb">
-                        <div class="breadcrumb-item active"><a href="{{route('home')}}">Dashboard</a></div>
+                        <div class="breadcrumb-item active"><a href="{{route('home')}}"><h6>Dashboard</h6></a></div>
                         <div class="breadcrumb-item">Profile</div>
                     </div>
                 </div>

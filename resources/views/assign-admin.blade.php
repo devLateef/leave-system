@@ -2,6 +2,7 @@
 @include('layouts.navbar')
 @include('layouts.sidebar')
 @section('content')
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <section class="section">
     <div class="container mt-5">
         <div class="row">

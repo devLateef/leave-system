@@ -13,12 +13,13 @@
                     <h1>Active Applications</h1>
                 </div>
             </section>
-            @if($user->role_id == $admin || $user->role_id == $superAdmin)
+            @if($user->role_id == $superAdmin)
             <!-- Admin view: Show all approved leave applications -->
             <table class="table table-striped table-hover">
                 <thead class="table-primary">
                     <tr>
                         <th scope="col">S/N</th>
+                        <th>Full Name</th>
                         <th scope="col">Leave Type</th>
                         <th scope="col">Expected Start Date</th>
                         <th scope="col">Expected End Date</th>
@@ -32,11 +33,47 @@
                             @if($leave->final_approval == 'Approved')
                                 <tr>
                                     <td scope="row">{{$loop->iteration}}</td>
+                                    <td>{{$leave->user->first_name ." ". $leave->user->last_name}}</td>
                                     <td>{{$leave->leave_type}}</td>
                                     <td>{{$leave->start_date}}</td>
                                     <td>{{$leave->end_date}}</td>
-                                    <td class="fw-bold {{ $leave->hod_approval == 'Approved' ? 'text-success' : ($leave->hod_approval == 'Defered' ? 'text-warning' : ($leave->hod_approval == 'Pending' ? 'text-warning' : 'text-danger')) }}">{{$leave->hod_approval}}</td>
-                                    <td class="fw-bold {{ $leave->final_approval == 'Approved' ? 'text-success' : ($leave->final_approval == 'Defered' ? 'text-warning' : ($leave->final_approval == 'Pending' ? 'text-warning' : 'text-danger')) }}">{{$leave->final_approval}}</td>
+                                    <td class="fw-bold {{ $leave->hod_approval == 'Approved' ? 'text-success' : ($leave->hod_approval == 'Defered' ? 'text-info' : ($leave->hod_approval == 'Pending' ? 'text-warning' : 'text-danger')) }}">{{$leave->hod_approval}}</td>
+                                    <td class="fw-bold {{ $leave->final_approval == 'Approved' ? 'text-success' : ($leave->final_approval == 'Defered' ? 'text-info' : ($leave->final_approval == 'Pending' ? 'text-warning' : 'text-danger')) }}">{{$leave->final_approval}}</td>
+                                </tr>
+                            @endif
+                        @endforeach
+                    @else
+                        <tr scope="row">
+                            <td colspan="6">No Record Found</td>
+                        </tr>
+                    @endif
+                </tbody>
+            </table>
+            @elseif($user->role_id == $admin)
+            <table class="table table-striped table-hover">
+                <thead class="table-primary">
+                    <tr>
+                        <th scope="col">S/N</th>
+                        <th>Full Name</th>
+                        <th scope="col">Leave Type</th>
+                        <th scope="col">Expected Start Date</th>
+                        <th scope="col">Expected End Date</th>
+                        <th scope="col">HOD Approval</th>
+                        <th scope="col">Final Approval</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if(count($leave_applications) > 0)
+                        @foreach ($leave_applications as $leave)
+                            @if($leave->final_approval == 'Approved' && $leave->user->role_id != 4)
+                                <tr>
+                                    <td scope="row">{{$loop->iteration}}</td>
+                                    <td>{{$leave->user->first_name ." ". $leave->user->last_name}}</td>
+                                    <td>{{$leave->leave_type}}</td>
+                                    <td>{{$leave->start_date}}</td>
+                                    <td>{{$leave->end_date}}</td>
+                                    <td class="fw-bold {{ $leave->hod_approval == 'Approved' ? 'text-success' : ($leave->hod_approval == 'Defered' ? 'text-info' : ($leave->hod_approval == 'Pending' ? 'text-warning' : 'text-danger')) }}">{{$leave->hod_approval}}</td>
+                                    <td class="fw-bold {{ $leave->final_approval == 'Approved' ? 'text-success' : ($leave->final_approval == 'Defered' ? 'text-info' : ($leave->final_approval == 'Pending' ? 'text-warning' : 'text-danger')) }}">{{$leave->final_approval}}</td>
                                 </tr>
                             @endif
                         @endforeach
@@ -53,6 +90,7 @@
                 <thead class="table-primary">
                     <tr>
                         <th scope="col">S/N</th>
+                        <th>Full Name</th>
                         <th scope="col">Leave Type</th>
                         <th scope="col">Expected Start Date</th>
                         <th scope="col">Expected End Date</th>
@@ -66,11 +104,12 @@
                             @if($leave->user->department == $user->department && $leave->final_approval == 'Approved')
                                 <tr>
                                     <td scope="row">{{$loop->iteration}}</td>
+                                    <td>{{$leave->user->first_name ." ". $leave->user->last_name}}</td>
                                     <td>{{$leave->leave_type}}</td>
                                     <td>{{$leave->start_date}}</td>
                                     <td>{{$leave->end_date}}</td>
-                                    <td class="fw-bold {{ $leave->hod_approval == 'Approved' ? 'text-success' : ($leave->hod_approval == 'Defered' ? 'text-warning' : ($leave->hod_approval == 'Pending' ? 'text-warning' : 'text-danger')) }}">{{$leave->hod_approval}}</td>
-                                    <td class="fw-bold {{ $leave->final_approval == 'Approved' ? 'text-success' : ($leave->final_approval == 'Defered' ? 'text-warning' : ($leave->final_approval == 'Pending' ? 'text-warning' : 'text-danger')) }}">{{$leave->final_approval}}</td>
+                                    <td class="fw-bold {{ $leave->hod_approval == 'Approved' ? 'text-success' : ($leave->hod_approval == 'Defered' ? 'text-info' : ($leave->hod_approval == 'Pending' ? 'text-warning' : 'text-danger')) }}">{{$leave->hod_approval}}</td>
+                                    <td class="fw-bold {{ $leave->final_approval == 'Approved' ? 'text-success' : ($leave->final_approval == 'Defered' ? 'text-info' : ($leave->final_approval == 'Pending' ? 'text-warning' : 'text-danger')) }}">{{$leave->final_approval}}</td>
                                 </tr>
                             @endif
                         @endforeach
@@ -87,6 +126,7 @@
                 <thead class="table-primary">
                     <tr>
                         <th scope="col">S/N</th>
+                        <th>Full Name</th>
                         <th scope="col">Leave Type</th>
                         <th scope="col">Expected Start Date</th>
                         <th scope="col">Expected End Date</th>
@@ -100,11 +140,12 @@
                             @if($leave->user_id == $user->id && $leave->final_approval == 'Approved')
                                 <tr>
                                     <td scope="row">{{$loop->iteration}}</td>
+                                    <td>{{$leave->user->first_name ." ". $leave->user->last_name}}</td>
                                     <td>{{$leave->leave_type}}</td>
                                     <td>{{$leave->start_date}}</td>
                                     <td>{{$leave->end_date}}</td>
-                                    <td class="fw-bold {{ $leave->hod_approval == 'Approved' ? 'text-success' : ($leave->hod_approval == 'Defered' ? 'text-warning' : ($leave->hod_approval == 'Pending' ? 'text-warning' : 'text-danger')) }}">{{$leave->hod_approval}}</td>
-                                    <td class="fw-bold {{ $leave->final_approval == 'Approved' ? 'text-success' : ($leave->final_approval == 'Defered' ? 'text-warning' : ($leave->final_approval == 'Pending' ? 'text-warning' : 'text-danger')) }}">{{$leave->final_approval}}</td>
+                                    <td class="fw-bold {{ $leave->hod_approval == 'Approved' ? 'text-success' : ($leave->hod_approval == 'Defered' ? 'text-info' : ($leave->hod_approval == 'Pending' ? 'text-warning' : 'text-danger')) }}">{{$leave->hod_approval}}</td>
+                                    <td class="fw-bold {{ $leave->final_approval == 'Approved' ? 'text-success' : ($leave->final_approval == 'Defered' ? 'text-info' : ($leave->final_approval == 'Pending' ? 'text-warning' : 'text-danger')) }}">{{$leave->final_approval}}</td>
                                 </tr>
                             @endif
                         @endforeach
