@@ -43,7 +43,7 @@ use Illuminate\Support\Facades\Auth;
 
 // Welcome route
 Route::get('/', function () {
-    return view('index');
+    return view('welcome');
 })->name('welcome');
 
 // Authentication routes

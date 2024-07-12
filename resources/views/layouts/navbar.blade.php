@@ -1,5 +1,5 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet">
-<nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+<nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm w-75">
     <div class="container ml-0">
         <a class="navbar-brand text-body" href="{{ url('/') }}">
             {{-- {{ config('app.name', 'Home') }} --}}
@@ -14,46 +14,13 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <!-- Left Side Of Navbar -->
             <ul class="navbar-nav md-auto d-lg-none d-xl-none d-md-inline d-sm-inline">
-                <li class="nav-item dropdown">
-                    <a href="#" class="nav-link has-dropdown text-body" data-toggle="dropdown"><i
-                            class="fa fa-columns"></i> <span>Leave Management</span></a>
-                    <ul class="dropdown-menu" style="display: none;">
-                        <li><a class="nav-link" href="{{route('leaves.apply')}}">Request for Leave</a></li>
-                        <li><a class="nav-link" href="{{route('leaves.active')}}">Approved Leaves</a></li>
-                        <li><a class="nav-link" href="{{route('leaves.defered')}}">Deferred Leaves</a></li>
-                        <li><a class="nav-link" href="{{route('leaves.declined')}}">Declined Leaves</a></li>
-                        <li><a class="nav-link" href="{{route('leaves.pending')}}">Pending Leaves</a></li>
-                    </ul>
-                </li>
-                @if(Auth::check() && Auth::user()->role_id == config('roles.ADMIN') || Auth::user()->role_id == config('roles.SUPER_ADMIN') || Auth::user()->role_id == config('roles.HOD'))
-                <li class="nav-item dropdown">
-                    <a href="#" class="nav-link has-dropdown text-body" data-toggle="dropdown"><i
-                            class="fa fa-user"></i>
-                        <span>User Management</span></a>
-                    <ul class="dropdown-menu" style="display: none;">
-                        @if(Auth::user()->role_id == config('roles.HOD'))
-                        <li><a class="nav-link" href="{{route('profile.all-users')}}">Fetch All Users</a></li>
-                        @elseif(Auth::user()->role_id == config('roles.SUPER_ADMIN'))
-                        <li><a class="nav-link" href="{{route('profile.create')}}">Add New User</a></li>
-                        <li><a class="nav-link" href="{{route('profile.assign')}}">Assign HOD</a></li>
-                        <li><a class="nav-link" href="{{route('profile.make-admin')}}">Assign Admin</a></li>
-                        <li><a class="nav-link" href="{{route('profile.all-hods')}}">Fetch All HOD(s)</a></li>
-                        <li><a class="nav-link" href="{{route('profile.all-users')}}">Fetch All Users</a></li>
-                        @else
-                        <li><a class="nav-link" href="{{route('profile.create')}}">Add New User</a></li>
-                        <li><a class="nav-link" href="{{route('profile.assign')}}">Assign HOD</a></li>
-                        <li><a class="nav-link" href="{{route('profile.all-hods')}}">Fetch All HOD(s)</a></li>
-                        <li><a class="nav-link" href="{{route('profile.all-users')}}">Fetch All Users</a></li>
-                        @endif
-                    </ul>
-                </li>
-                @endif
+
             </ul>
 
             <!-- Right Side Of Navbar -->
-            <ul class="navbar-nav ms-auto d-md-inline d-sm-inline">
+            <ul class="navbar-nav ms-auto">
                 <!-- Authentication Links -->
-                <li class="dropdown mr-5">
+                <li class="dropdown m-0">
                     <a href="#" data-toggle="dropdown"
                         class="nav-link dropdown-toggle nav-link-lg nav-link-user">
                         <img alt="image" src="{{asset('assets/img/avatar/avatar-1.png')}}"
@@ -78,6 +45,40 @@
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                             @csrf
                         </form>
+                <li class="nav-item dropdown d-lg-none d-md-block">
+                    <a href="#" class="nav-link has-dropdown text-body" data-toggle="dropdown"><i
+                            class="fa fa-columns"></i> <span>Leave Management</span></a>
+                    <ul class="dropdown-menu" style="display: none;">
+                        <li><a class="nav-link" href="{{route('leaves.apply')}}">Request for Leave</a></li>
+                        <li><a class="nav-link" href="{{route('leaves.active')}}">Approved Leaves</a></li>
+                        <li><a class="nav-link" href="{{route('leaves.defered')}}">Deferred Leaves</a></li>
+                        <li><a class="nav-link" href="{{route('leaves.declined')}}">Declined Leaves</a></li>
+                        <li><a class="nav-link" href="{{route('leaves.pending')}}">Pending Leaves</a></li>
+                    </ul>
+                </li>
+                @if(Auth::check() && Auth::user()->role_id == config('roles.ADMIN') || Auth::user()->role_id == config('roles.SUPER_ADMIN') || Auth::user()->role_id == config('roles.HOD'))
+                <li class="nav-item dropdown d-lg-none d-md-block">
+                    <a href="#" class="nav-link has-dropdown text-body" data-toggle="dropdown"><i
+                            class="fa fa-user"></i>
+                        <span>User Management</span></a>
+                    <ul class="dropdown-menu" style="display: none;">
+                        @if(Auth::user()->role_id == config('roles.HOD'))
+                        <li><a class="nav-link" href="{{route('profile.all-users')}}">Fetch All Users</a></li>
+                        @elseif(Auth::user()->role_id == config('roles.SUPER_ADMIN'))
+                        <li><a class="nav-link" href="{{route('profile.create')}}">Add New User</a></li>
+                        <li><a class="nav-link" href="{{route('profile.assign')}}">Assign HOD</a></li>
+                        <li><a class="nav-link" href="{{route('profile.make-admin')}}">Assign Admin</a></li>
+                        <li><a class="nav-link" href="{{route('profile.all-hods')}}">Fetch All HOD(s)</a></li>
+                        <li><a class="nav-link" href="{{route('profile.all-users')}}">Fetch All Users</a></li>
+                        @else
+                        <li><a class="nav-link" href="{{route('profile.create')}}">Add New User</a></li>
+                        <li><a class="nav-link" href="{{route('profile.assign')}}">Assign HOD</a></li>
+                        <li><a class="nav-link" href="{{route('profile.all-hods')}}">Fetch All HOD(s)</a></li>
+                        <li><a class="nav-link" href="{{route('profile.all-users')}}">Fetch All Users</a></li>
+                        @endif
+                    </ul>
+                </li>
+                @endif
                     </div>
                 </li>
             </ul>
