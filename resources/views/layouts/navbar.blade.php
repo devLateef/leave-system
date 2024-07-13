@@ -1,15 +1,15 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet">
-<nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm w-75">
+<nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm col-sm-12 col-md-12 col-lg-10">
     <div class="container ml-0">
-        <a class="navbar-brand text-body" href="{{ url('/') }}">
-            {{-- {{ config('app.name', 'Home') }} --}}
-            Home
-        </a>
-        <button class="navbar-toggler absolute" type="button" data-bs-toggle="collapse"
-            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-            aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+            <a class="navbar-brand text-body" href="{{ url('/home') }}">
+                {{-- {{ config('app.name', 'Home') }} --}}
+                Home
+            </a>
+            <button class="navbar-toggler absolute" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <!-- Left Side Of Navbar -->
@@ -22,7 +22,7 @@
                 <!-- Authentication Links -->
                 <li class="dropdown m-0">
                     <a href="#" data-toggle="dropdown"
-                        class="nav-link dropdown-toggle nav-link-lg nav-link-user">
+                        class="nav-link dropdown-toggle nav-link-lg nav-link-user mr-0">
                         <img alt="image" src="{{asset('assets/img/avatar/avatar-1.png')}}"
                             class="rounded-circle mr-1">
                         <div class="d-sm-none d-lg-inline-block text-body">{{ Auth::user()->first_name }}

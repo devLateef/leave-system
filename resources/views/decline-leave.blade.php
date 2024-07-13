@@ -11,7 +11,6 @@
             <section class="section">
                 <div class="section-header">
                     <h1>Declined Applications</h1>
-                    <h2>{{$user->role_id == $superAdmin}}</h2>
                 </div>
             </section>
             @if($user->role_id == $superAdmin)
