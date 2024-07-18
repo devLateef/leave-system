@@ -199,9 +199,15 @@
 <script>
 
     document.getElementById('userForm').addEventListener('submit', function(event) {
-        var userType = document.getElementById('state_of_origin').value;
-        if (userType == '') {
-            alert('Please select a valid country type.');
+        var stateOfOrigin = document.getElementById('state_of_origin').value;
+        var gender = document.getElementById('gender').value;
+        var employeeType = document.getElementById('employee_type').value;
+        var department = document.getElementById('department').value;
+        var staffLevel = document.getElementById('staff_level').value;
+        var academicStaff = document.getElementById('academic_staff').value;
+        if (stateOfOrigin == '' || gender == '' || employeeType == '' 
+        || department == '' || staffLevel == '' || academicStaff == '') {
+            alert('Please select a valid input.');
             event.preventDefault(); // Prevent form submission
         }
     });
