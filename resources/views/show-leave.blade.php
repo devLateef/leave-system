@@ -97,6 +97,7 @@
                                                         @else
                                                         <dd class="mt-2"><em>{{$leave->hod_approval}} Start Date:</em> <br> <b>{{$hodComment->start_date}}</b></dd>
                                                         <dd><em>{{$leave->hod_approval}} End Date:</em> <br> <b>{{$hodComment->end_date}}</b></dd>
+                                                        <dd><em>Comment:</em> <br> <b>{{$hodComment->message}}</b></dd>
                                                         @endif
                                                     @endif
                                                 </div>
@@ -130,6 +131,7 @@
                                                         @else
                                                         <dd class="mt-2"><em>{{$leave->final_approval}} Start Date:</em> <br> <b>{{$adminComment->start_date}}</b></dd>
                                                         <dd><em>{{$leave->final_approval}} End Date:</em> <br> <b>{{$adminComment->end_date}}</b></dd>
+                                                        <dd><em>Comment:</em> <br> <b>{{$adminComment->message}}</b></dd>
                                                         @endif
                                                     @endif
                                                 </div>
