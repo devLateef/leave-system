@@ -22,8 +22,9 @@ return new class extends Migration
             $table->string('gender');
             $table->date('dob')->nullable();
             $table->string('phone');
-            $table->string('city');
-            $table->string('country');
+            $table->string('staff_level')->nullable();
+            $table->string('state_of_origin')->nullable();
+            $table->string('employee_type')->nullable();
             $table->string('address');
             $table->boolean('is_academic_staff')->nullable();
             $table->integer('leave_balance')->nullable();

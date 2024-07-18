@@ -70,12 +70,12 @@
                                             <dl>{{$user->gender}}</dl>
                                         </div>
                                         <div class="form-group col-md-4 col-12">
-                                            <dd>City</dd>
-                                            <dl>{{$user->city}}</dl>
+                                            <dd>State of Origin</dd>
+                                            <dl>{{$user->state_of_origin}}</dl>
                                         </div>
                                         <div class="form-group col-md-4 col-12">
-                                            <dd>Country</dd>
-                                            <dl>{{$user->country}}</dl>
+                                            <dd>Employment Type</dd>
+                                            <dl>{{$user->employee_type}}</dl>
                                         </div>
                                     </div>
                                     <div class="row">

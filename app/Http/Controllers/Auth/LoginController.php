@@ -40,6 +40,15 @@ class LoginController extends Controller
     }
 
     /**
+     * Get the login username to be used by the controller.
+     *
+     * @return string
+     */
+    public function username()
+    {
+        return 'staff_id';
+    }
+    /**
      * Validate the user login request.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -48,23 +57,37 @@ class LoginController extends Controller
     protected function validateLogin(Request $request)
     {
         $request->validate([
-            'email' => 'required|string|email',
+            'staff_id' => 'required|string',
             'password' => 'required|string|min:8',
         ]);
     }
 
+    /**
+     * The user has been authenticated.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  mixed  $user
+     * @return void
+     */
     protected function authenticated(Request $request, $user)
     {
         // Add flash message
         toastr()->success('You have successfully logged in!');
     }
 
+    /**
+     * Get the failed login response instance.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+
     protected function sendFailedLoginResponse(Request $request)
     {
         return redirect()->back()
             ->withInput($request->only($this->username(), 'remember'))
             ->withErrors([
-                'email' => trans('auth.failed'),
+                $this->username() => trans('auth.failed'),
                 'password' => 'The provided password is incorrect.',
             ]);
     }

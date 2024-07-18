@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ApplicationSubmitted;
 use App\Models\Leave;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon as SupportCarbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Yajra\DataTables\Facades\DataTables;
 
 class LeaveController extends Controller
@@ -33,6 +36,10 @@ class LeaveController extends Controller
     public function store(Request $request)
     {
         $user = Auth::user();
+        $hod = User::where('department', $user->department)->where('role_id', 2)->first();
+        $superAdmin = User::where('role_id', 4)->first();
+        $admin = User::where('role_id', 3)->first();
+        $recipients = [$superAdmin->email, $admin->email];
         $leave_balance = $user->leave_balance;
         $request->validate([
             'start_date' => ['required', 'date', function($attribute, $value, $fail) {
@@ -52,10 +59,23 @@ class LeaveController extends Controller
             'comment' => 'required|string'
         ]);
 
-        // Calculate total days requested
-        $startDate = SupportCarbon::parse($request->start_date);
-        $endDate = SupportCarbon::parse($request->end_date);
-        $totalDaysRequested = $startDate->diffInDays($endDate) + 1; // Include the start date
+         // Calculate total days requested
+         $startDate = SupportCarbon::parse($request->start_date);
+         $endDate = SupportCarbon::parse($request->end_date);
+ 
+         $totalDaysRequested = $startDate->diffInDays($endDate) + 1; // Include the start date
+         $weekends = 0;
+ 
+         // Count weekends within the range
+         for ($date = $startDate; $date->lte($endDate); $date->addDay()) {
+             if ($date->isWeekend()) {
+                 $weekends++;
+             }
+         }
+ 
+         $totalDaysRequested -= $weekends;
+
+         $applyingUser = User::find($user->id);
         if($totalDaysRequested <= $leave_balance){
             $new_leave = new Leave();
             $new_leave->leave_type = $request->leave_type;
@@ -67,6 +87,10 @@ class LeaveController extends Controller
             $new_leave->comment = $request->comment;
             $new_leave->user_id = Auth::user()->id;
             $new_leave->save();
+            //Immediately removing the requested days from the user leave balance to enforce leave balance constraint
+            $applyingUser->leave_balance -= $totalDaysRequested;
+            $applyingUser->save();
+            Mail::to($recipients)->send(new ApplicationSubmitted($new_leave, $recipients));
             return redirect()->route('home')->with('success', 'Leave Applied successfully.');
         }elseif($user->role_id == config('roles.SUPER_ADMIN')){
             $new_leave = new Leave();
@@ -79,6 +103,9 @@ class LeaveController extends Controller
             $new_leave->comment = $request->comment;
             $new_leave->user_id = Auth::user()->id;
             $new_leave->save();
+            $applyingUser->leave_balance -= $totalDaysRequested;
+            $applyingUser->save();
+            Mail::to($recipients)->send(new ApplicationSubmitted($new_leave, $recipients));
             return redirect()->route('home')->with('success', 'Leave Applied successfully.');
         }else{
             return redirect()->back()->with('message', __('Sorry: You have :leave_balance Available Leaves.', ['leave_balance' => $leave_balance]));
@@ -118,7 +145,12 @@ class LeaveController extends Controller
     public function update(Request $request, Leave $leave)
     {
         $user = Auth::user();
+        $hod = User::where('department', $user->department)->where('role_id', 2)->first();
+        $superAdmin = User::where('role_id', 4)->first();
+        $admin = User::where('role_id', 3)->first();
+        $recipients = [$superAdmin->email, $admin->email];
         $leave_balance = $user->leave_balance;
+
         $request->validate([
             'start_date' => ['required', 'date', function($attribute, $value, $fail) {
                 $dayOfWeek = SupportCarbon::parse($value)->dayOfWeek;
@@ -140,8 +172,23 @@ class LeaveController extends Controller
         // Calculate total days requested
         $startDate = SupportCarbon::parse($request->start_date);
         $endDate = SupportCarbon::parse($request->end_date);
+
         $totalDaysRequested = $startDate->diffInDays($endDate) + 1; // Include the start date
-        if($totalDaysRequested <= $leave_balance){
+        $weekends = 0;
+
+        // Count weekends within the range
+        for ($date = $startDate; $date->lte($endDate); $date->addDay()) {
+            if ($date->isWeekend()) {
+                $weekends++;
+            }
+        }
+
+        $totalDaysRequested -= $weekends;
+        $applyingUser = User::find($leave->user_id);
+        //Adding the existing days requested to leave balance before editing
+        $applyingUser->leave_balance += $leave->total_days_requested;
+        $applyingUser->save();
+        if ($totalDaysRequested <= $leave_balance) {
             $leave->leave_type = $request->leave_type;
             $leave->start_date = $request->start_date;
             $leave->end_date = $request->end_date;
@@ -151,8 +198,13 @@ class LeaveController extends Controller
             $leave->comment = $request->comment;
             $leave->user_id = Auth::user()->id;
             $leave->save();
+            //Immediately removing the requested days from the user leave balance to enforce leave balance constraint
+            $applyingUser = User::find($leave->user_id);
+            $applyingUser->leave_balance -= $leave->total_days_requested;
+            $applyingUser->save();
+            Mail::to($recipients)->send(new ApplicationSubmitted($leave, $recipients));
             return redirect(route('home'))->with('success', 'Leave Updated Successfully');
-        }else{
+        } else {
             return redirect()->back()->with('message', __('Sorry: You have :leave_balance Available Leaves.', ['leave_balance' => $leave_balance]));
         }
     }
@@ -318,11 +370,11 @@ class LeaveController extends Controller
     
                 if ($user->role_id == $superAdmin || $user->role_id == $admin || $user->role_id == $hod) {
                     $buttons .= '<a href="'.route('leaves.show', $row->id).'"><button class="btn btn-primary m-2">Show Details</button></a>';
-                } elseif ($row->hod_approval == 'Pending' || $row->final_approval == 'Pending') {
-                    $buttons .= '<a href="'.route('leaves.show', $row->id).'"><button class="btn btn-primary mb-1 mt-1">Show</button></a>';
-                    $buttons .= '<a href="'.route('leaves.edit', $row->id).'"><button class="btn btn-danger mb-1">Edit</button></a>';
+                } elseif ($row->hod_approval == 'Pending' && $row->final_approval == 'Pending') {
+                    $buttons .= '<a href="'.route('leaves.show', $row->id).'"><button class="btn btn-primary m-1">Show</button></a>';
+                    $buttons .= '<a href="'.route('leaves.edit', $row->id).'"><button class="btn btn-danger m-1">Edit</button></a>';
                 } else {
-                    $buttons .= '<a href="'.route('leaves.show', $row->id).'"><button class="btn btn-primary mb-1 mt-1">Show</button></a>';
+                    $buttons .= '<a href="'.route('leaves.show', $row->id).'"><button class="btn btn-primary m-1">Show</button></a>';
                 }
     
                 return $buttons;

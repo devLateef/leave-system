@@ -81,7 +81,9 @@ Route::prefix('profile')->middleware('auth')->group(function () {
     Route::get('/password', [UserController::class, 'createpass'])->name('profile.change');
     Route::put('/password/{user}', [UserController::class, 'updatePass'])->name('profile.update-password');
     Route::put('/user/{user}', [UserController::class, 'update'])->name('profile.update-user');
+    Route::put('/super/{user}', [UserController::class, 'adminUpdate'])->name('profile.adminupdate-user');
     Route::get('/user-detail/{user}', [UserController::class, 'showUserDetail'])->name('profile.user-detail');
+    Route::get('/user-details/{user}', [UserController::class, 'showUserDetailsForEdit'])->name('profile.users-detail');
     Route::get('/users', [UserController::class, 'getAllUsers'])->name('profile.all-users');
     Route::get('/hods', [UserController::class, 'getAllHods'])->name('profile.all-hods');
     Route::get('/users/{department}', [UserController::class, 'getUsersByDepartment']);

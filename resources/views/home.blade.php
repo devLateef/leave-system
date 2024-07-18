@@ -2,6 +2,7 @@
 
 @section('content')
 <div id="app">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <style>
         .dataTables_wrapper .dataTables_paginate .paginate_button {
@@ -158,10 +159,10 @@
                             @if($user->role_id == $superAdmin || $user->role_id == $admin || $user->role_id == $hod)
                             <a href="{{route('leaves.show', $leave->id)}}"><button class="btn btn-primary m-2">Show Details</button></a>
                             @elseif($leave->hod_approval == 'Pending' || $leave->final_approval == 'Pending')
-                            <a href="{{route('leaves.show', $leave->id)}}"><button class="btn btn-primary mb-1 mt-1">Show</button></a>
-                            <a href="{{route('leaves.edit', $leave->id)}}"><button class="btn btn-danger mb-1">Edit</button></a>
+                            <a href="{{route('leaves.show', $leave->id)}}"><button class="btn btn-primary">Show</button></a>
+                            <a href="{{route('leaves.edit', $leave->id)}}"><button class="btn btn-danger">Edit</button></a>
                             @else
-                            <a href="{{route('leaves.show', $leave->id)}}"><button class="btn btn-primary mb-1 mt-1">Show</button></a>
+                            <a href="{{route('leaves.show', $leave->id)}}"><button class="btn btn-primary">Show</button></a>
                             @endif
                         </td>
                     </tr>
@@ -178,32 +179,44 @@
     </div>
 </div>
 <script>
-
-$(document).ready(function () {
-    $('#leavesTable').DataTable({
-        "serverSide": true,
-        "responsive": true,
-        "ajax": "{{ route('leaves.data') }}",
-        "columns": [
-            { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
-            { data: 'full_name', name: 'full_name' },
-            { data: 'leave_type', name: 'leave_type' },
-            { data: 'start_date', name: 'start_date' },
-            { data: 'end_date', name: 'end_date' },
-            { data: 'hod_approval', name: 'hod_approval' },
-            { data: 'final_approval', name: 'final_approval' },
-            { 
-                "data": 'action', 
-                "name": 'action', 
-                "orderable": false, 
-                "searchable": false,
-                "render": function (data, type, full, meta) {
-                    return full.action; // Assuming 'action' is rendered HTML in the backend
-                }
+    $(document).ready(function () {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                'Referrer-Policy': 'no-referrer-when-downgrade'
             }
-        ],
-        "order": [[1, 'desc']],
+        });
+
+        $('#leavesTable').DataTable({
+            "serverSide": true,
+            "responsive": true,
+            "ajax": {
+                "url": "{{ route('leaves.data') }}",
+                "type": "GET", // Change this to POST if your server expects a POST request
+                "headers": {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            },
+            "columns": [
+                { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
+                { data: 'full_name', name: 'full_name' },
+                { data: 'leave_type', name: 'leave_type' },
+                { data: 'start_date', name: 'start_date' },
+                { data: 'end_date', name: 'end_date' },
+                { data: 'hod_approval', name: 'hod_approval' },
+                { data: 'final_approval', name: 'final_approval' },
+                { 
+                    "data": 'action', 
+                    "name": 'action', 
+                    "orderable": false, 
+                    "searchable": false,
+                    "render": function (data, type, full, meta) {
+                        return full.action; // Assuming 'action' is rendered HTML in the backend
+                    }
+                }
+            ],
+            "order": [[1, 'desc']],
+        });
     });
-});
 </script>
 @endsection

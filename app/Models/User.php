@@ -26,10 +26,11 @@ class User extends Authenticatable
         'dob',
         'department',
         'phone',
-        'city',
+        'state_of_origin',
+        'employee_type',
         'is_academic_staff',
         'leave_balance',
-        'country',
+        'staff_level',
         'address',
         'password',
     ];

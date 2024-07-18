@@ -42,13 +42,13 @@
             @if (Route::has('login'))
             <div class="carousel-container">
               <div class="carousel-content">
-                <h2 class="animate__animated animate__fadeInDown">Leave Management System</h2>
+                <h2 class="animate__animated animate__fadeInDown text-info">Employee <br> Leave Management System <br> For HR</h2>
                 <p class="animate__animated animate__fadeInUp">Effortless leave management, empowered productivity.</p>
                 @auth
-                    <a href="{{ url('/home') }}" class="btn-get-started animate__animated animate__fadeInUp scrollto">Login</a>
+                    <a href="{{ url('/home') }}" class="btn-get-started animate__animated animate__fadeInUp scrollto">Get Started</a>
                     {{-- <a href="{{ url('/home') }}" class="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Home</a> --}}
                 @else
-                    <a href="{{ route('login') }}" class="btn-get-started animate__animated animate__fadeInUp scrollto">Login</a>
+                    <a href="{{ route('login') }}" class="btn-get-started animate__animated animate__fadeInUp scrollto">Get Started</a>
                 @endauth
               </div>
             </div>
@@ -59,9 +59,9 @@
           <div class="carousel-item" style="background-image: url(assets/img/slide/slide-2.jpg);">
             <div class="carousel-container">
               <div class="carousel-content">
-                <h2 class="animate__animated animate__fadeInDown">LMS</h2>
+                <h2 class="animate__animated animate__fadeInDown text-info">LMS</h2>
                 <p class="animate__animated animate__fadeInUp">Empowering your team with seamless leave management, one day at a time.</p>
-                <a href="{{ route('login') }}" class="btn-get-started animate__animated animate__fadeInUp scrollto">Login</a>
+                <a href="{{ route('login') }}" class="btn-get-started animate__animated animate__fadeInUp scrollto">Get Started</a>
               </div>
             </div>
           </div>

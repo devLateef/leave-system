@@ -84,10 +84,10 @@
                             <form method="POST" action="{{route('login')}}" class="needs-validation" novalidate="">
                                 @csrf
                                 <div class="form-group">
-                                    <label for="email">Email</label>
-                                    <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email"
+                                    <label for="staff_id">Staff ID</label>
+                                    <input id="staff_id" type="text" class="form-control @error('staff_id') is-invalid @enderror" name="staff_id"
                                         tabindex="1" required autofocus>
-                                    @error('email')
+                                    @error('staff_id')
                                     <div class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </div>

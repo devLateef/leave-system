@@ -70,12 +70,12 @@
                                             <dl>{{$user->gender}}</dl>
                                         </div>
                                         <div class="form-group col-md-4 col-12">
-                                            <dd>City</dd>
-                                            <dl>{{$user->city}}</dl>
+                                            <dd>State of Origin</dd>
+                                            <dl>{{$user->state_of_origin}}</dl>
                                         </div>
                                         <div class="form-group col-md-4 col-12">
-                                            <dd>Country</dd>
-                                            <dl>{{$user->country}}</dl>
+                                            <dd>Employee Type</dd>
+                                            <dl>{{$user->employee_type}}</dl>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -91,6 +91,10 @@
                                             <dl>No</dl>
                                             @endif
                                         </div>
+                                        <div class="form-group col-md-4 col-12">
+                                            <dd>Staff Level</dd>
+                                            <dl>{{$user->staff_level}}</dl>
+                                        </div>
                                     </div>
                                     <div class="row">
                                         <div class="form-group col-md-12 col-12">
@@ -102,6 +106,9 @@
                                         {{-- <div class="form-group col-md-12 col-12">
                                             <a href="#" class="btn btn-primary">Edit User</a>
                                         </div> --}}
+                                        <div class="form-group col-md-12 col-12">
+                                            <a class="btn btn-info text-white" href="{{route('profile.users-detail', $user->id)}}">Edit User</a>
+                                        </div>
                                         <div class="form-group col-md-12 col-12">
                                             <form action="{{route('profile.delete', $user->id)}}" method="POST" onsubmit="return confirm('Are you sure you want to delete this user?');">
                                                 @csrf

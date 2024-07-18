@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+<meta name="csrf-token" content="{{ csrf_token() }}">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <div id="app">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -168,34 +169,47 @@
     </div>
 </div>
 <script>
-    $(document).ready(function () {
-    $('#usersTable').dataTable({
-        "serverSide": true,
-        "responsive": true,
-        "ajax": "{{route('profile.users')}}",
-        columns: [
-            { data: null, name: 'sn' },
-            { data: 'first_name', name: 'first_name' },
-            { data: 'last_name', name: 'last_name' },
-            { data: 'staff_id', name: 'staff_id' },
-            { data: 'department', name: 'department' },
-            { data: 'gender', name: 'gender' },
-            {
-                render: function(data, type, row) {
-                // Construct the URL with the user ID dynamically
-                var url = '{{ route("profile.user-detail", ":id") }}';
-                url = url.replace(':id', row.id);
-                
-                return '<td><a href="' + url + '"><button class="btn btn-primary m-1">Show</button></a></td>';
-                },
-                orderable: false,
-                searchable: false
+ $(document).ready(function () {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                'Referrer-Policy': 'no-referrer-when-downgrade'
             }
-        ],
-        createdRow: function (row, data, index) {
-                    // Add serial number
-                    $('td', row).eq(0).html(index + 1 + this.api().page.info().start);
-                    }
+        });
+
+        $('#usersTable').dataTable({
+            "serverSide": true,
+            "responsive": true,
+            "ajax": {
+                "url": "{{route('profile.users')}}",
+                "type": "GET", // Change this to POST if your server expects a POST request
+                "headers": {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            },
+            columns: [
+                { data: null, name: 'sn' },
+                { data: 'first_name', name: 'first_name' },
+                { data: 'last_name', name: 'last_name' },
+                { data: 'staff_id', name: 'staff_id' },
+                { data: 'department', name: 'department' },
+                { data: 'gender', name: 'gender' },
+                {
+                    render: function(data, type, row) {
+                        // Construct the URL with the user ID dynamically
+                        var url = '{{ route("profile.user-detail", ":id") }}';
+                        url = url.replace(':id', row.id);
+                        
+                        return '<td><a href="' + url + '"><button class="btn btn-primary m-1">Show</button></a></td>';
+                    },
+                    orderable: false,
+                    searchable: false
+                }
+            ],
+            createdRow: function (row, data, index) {
+                // Add serial number
+                $('td', row).eq(0).html(index + 1 + this.api().page.info().start);
+        }
     });
 });
 </script>

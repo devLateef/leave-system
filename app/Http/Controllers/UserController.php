@@ -6,6 +6,7 @@ use App\Models\Department;
 use App\Models\Leave;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Ozdemir\Datatables\Datatables;
@@ -35,27 +36,57 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $new_user = new User();
-        $new_user->first_name = $request->first_name;
-        $new_user->last_name = $request->last_name;
-        $new_user->staff_id = $request->staff_id;
-        $new_user->email = $request->email;
-        $new_user->gender = $request->gender;
-        $new_user->dob = $request->dob;
-        $new_user->department = $request->department;
-        $new_user->phone = $request->phone;
-        $new_user->city = $request->city;
-        $new_user->is_academic_staff = $request->is_academic_staff;
-        $new_user->leave_balance = $request->leave_balance;
-        $new_user->country = $request->country;
-        $new_user->address = $request->address;
-        $new_user->save();
-        toastr()->success('success', 'New User Created Successfully');
-        return redirect(route('home'));
+        $messages = [
+            'staff_id.regex' => 'The staff ID is not Valid.',
+            'email.unique' => 'The email has already been taken.',
+            'staff_id.unique' => 'The staff ID has already been taken.',
+            'dob.before_or_equal' => 'You must be at least 18 years old.',
+        ];
+        $request->validate([
+            'first_name' => ['required', 'string', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
+            'department' => ['required', 'string', 'max:255'],
+            'dob' => ['required', 'date', 'before_or_equal:' . Carbon::now()->subYears(18)->format('Y-m-d')],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'staff_id' => [
+                'required', 
+                'string', 
+                'max:20', 
+                'unique:users',
+                'regex:/^CUA/',
+            ],
+        ], $messages);
+        try{
+            $new_user = new User();
+            $new_user->first_name = $request->first_name;
+            $new_user->last_name = $request->last_name;
+            $new_user->staff_id = $request->staff_id;
+            $new_user->email = $request->email;
+            $new_user->gender = $request->gender;
+            $new_user->dob = $request->dob;
+            $new_user->department = $request->department;
+            $new_user->phone = $request->phone;
+            $new_user->staff_level = $request->staff_level; // newly added
+            $new_user->state_of_origin = $request->state_of_origin; //city to state of origin
+            $new_user->is_academic_staff = $request->is_academic_staff;
+            $new_user->employee_type = $request->employee_type; // country to employment_type
+            $new_user->leave_balance = $request->leave_balance;
+            $new_user->address = $request->address;
+            $new_user->save();
+            toastr()->success('success', 'New User Created Successfully');
+            return redirect(route('home'));
+        }catch(\Exception $e){
+            return redirect()->back()->withErrors(['error' => 'There was a problem updating the user: ' . $e->getMessage()]);
+        }
     }
 
     public function showUserDetail(User $user){
         return view('show-user', compact('user'));
+    }
+
+    public function showUserDetailsForEdit(User $user){
+        $departments = Department::all();
+        return view('admin-edituser', compact(['user', 'departments']));
     }
     /**
      * Display the specified resource.
@@ -72,7 +103,8 @@ class UserController extends Controller
     public function edit(User $user)
     {
         $user = Auth::user();
-        return view('edit-profile', compact('user'));
+        $departments = Department::all();
+        return view('edit-profile', compact(['user', 'departments']));
     }
 
     /**
@@ -80,6 +112,25 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
+        $messages = [
+            'staff_id.regex' => 'The staff ID is not Valid.',
+            'email.unique' => 'The email has already been taken.',
+            'staff_id.unique' => 'The staff ID has already been taken.',
+        ];
+
+        $request->validate([
+            'first_name' => ['required', 'string', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
+            'staff_id' => [
+                'required', 
+                'string', 
+                'max:20', 
+                'unique:users,staff_id,' 
+                . $user->id, 
+                'regex:/^CUA/'],
+        ], $messages);
+
         $user->first_name = $request->first_name;
         $user->last_name = $request->last_name;
         $user->email = $request->email;
@@ -87,6 +138,48 @@ class UserController extends Controller
         $user->address = $request->address;
         $user->update();
         return redirect()->back(201)->with('success', 'User updated successfully.');
+    }
+
+    public function adminUpdate(Request $request, User $user)
+    {
+        $messages = [
+            'staff_id.regex' => 'The staff ID is not Valid.',
+            'email.unique' => 'The email has already been taken.',
+            'staff_id.unique' => 'The staff ID has already been taken.',
+            'dob.before_or_equal' => 'You must be at least 18 years old.',
+        ];
+
+        $request->validate([
+            'first_name' => ['required', 'string', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
+            'department' => ['required', 'string', 'max:255'],
+            'dob' => ['required', 'date', 'before_or_equal:' . Carbon::now()->subYears(18)->format('Y-m-d')],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
+            'staff_id' => ['required', 'string', 'max:20', 'unique:users,staff_id,' . $user->id],
+        ], $messages);
+
+        try {
+            $user->first_name = $request->first_name;
+            $user->last_name = $request->last_name;
+            $user->staff_id = $request->staff_id;
+            $user->email = $request->email;
+            $user->gender = $request->gender;
+            $user->dob = $request->dob;
+            $user->department = $request->department;
+            $user->phone = $request->phone;
+            $user->staff_level = $request->staff_level;
+            $user->state_of_origin = $request->state_of_origin;
+            $user->is_academic_staff = $request->is_academic_staff;
+            $user->employee_type = $request->employee_type;
+            $user->leave_balance = $request->leave_balance;
+            $user->address = $request->address;
+            $user->save();
+    
+            toastr()->success('User updated successfully.');
+            return redirect(route('home'));
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['error' => 'There was a problem updating the user: ' . $e->getMessage()]);
+        }
     }
 
     public function updatePass(Request $request, User $user)

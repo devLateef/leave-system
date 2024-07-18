@@ -25,7 +25,7 @@
                         Change information about yourself on this page.
                     </p>
                     @if ($errors->any())
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <div class="text-white alert alert-danger alert-dismissible fade show" role="alert">
                             @foreach ($errors->all() as $error)
                                 <div>{{ $error }}</div>
                             @endforeach
@@ -39,7 +39,6 @@
 
                         </div>
                         <div class="col-12 col-md-12 col-lg-12">
-                            @if($user->role_id == config('roles.ADMIN') || $user->role_id == config('roles.SUPER_ADMIN'))
                             <div class="card">
                                 <form method="post" class="needs-validation" novalidate="" action="{{route('profile.adminupdate-user', $user->id)}}">
                                     @csrf
@@ -242,71 +241,6 @@
                                     </div>
                                 </form>
                             </div>
-                            @else
-                            <div class="card">
-                                <form method="post" class="needs-validation" novalidate="" action="{{route('profile.update-user', $user->id)}}">
-                                    @csrf
-                                    @method('PUT')
-                                    <div class="card-header">
-                                        <h4>Edit Profile</h4>
-                                    </div>
-                                    <div class="card-body">
-                                        @if (session('success'))
-                                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                            {{ session('success') }}
-                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        @endif
-                                        <div class="row">
-                                            <div class="form-group col-md-6 col-12">
-                                                <label for="first_name">First Name</label>
-                                                <input id="first_name" type="text" class="form-control" name="first_name"
-                                                    value="{{$user->first_name}}" required>
-                                                <div class="invalid-feedback">
-                                                    Please fill in the first name
-                                                </div>
-                                            </div>
-                                            <div class="form-group col-md-6 col-12">
-                                                <label for="last_name">Last Name</label>
-                                                <input id="last_name" type="text" class="form-control" name="last_name"
-                                                    value="{{$user->last_name}}" required>
-                                                <div class="invalid-feedback">
-                                                    Please fill in the last name
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="form-group col-md-7 col-12">
-                                                <label for="email">Email</label>
-                                                <input id="email" type="email" class="form-control" name="email"
-                                                    value="{{$user->email}}" required>
-                                                <div class="invalid-feedback">
-                                                    Please fill in the email
-                                                </div>
-                                            </div>
-                                            <div class="form-group col-md-5 col-12">
-                                                <label for="phone">Phone</label>
-                                                <input id="phone" type="tel" class="form-control" name="phone" 
-                                                    value="{{$user->phone}}">
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="form-group col-md-12 col-12">
-                                                <label for="address">Address</label>
-                                                <textarea id="address" class="form-control" name="address" rows="5">{{$user->address}}</textarea>
-                                                <div class="invalid-feedback">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="card-footer text-right">
-                                        <button class="btn btn-primary">Save Changes</button>
-                                    </div>
-                                </form>
-                            </div>
-                            @endif
                         </div>
                     </div>
                 </div>
