@@ -1,30 +1,30 @@
 "use strict";
 
-var cleavePN = new Cleave('.phone-number', {
+var cleavePN = new cleaveC('.phone-number', {
   phone: true,
   phoneRegionCode: 'us'
 });
-var cleaveC = new Cleave('.currency', {
+var cleaveC = new cleaveC('.currency', {
   numeral: true,
   numeralThousandsGroupStyle: 'thousand'
 });
-var cleavePC = new Cleave('.purchase-code', {
+var cleavePC = new cleaveC('.purchase-code', {
   delimiter: '-',
   blocks: [4, 4, 4, 4],
   uppercase: true
 });
-var cleaveI = new Cleave('.invoice-input', {
+var cleaveI = new cleaveC('.invoice-input', {
   prefix: 'INV',
   delimiter: '-',
   blocks: [10],
   uppercase: true
 });
-var cleaveD = new Cleave('.datemask', {
+var cleaveD = new cleaveC('.datemask', {
   date: true,
   datePattern: ['Y', 'm', 'd']
 });
 var cc_last_type;
-var cleaveCC = new Cleave('.creditcard', {
+var cleaveCC = new cleaveC('.creditcard', {
   creditCard: true,
   onCreditCardTypeChanged: function(type) {
     if(type !== 'unknown') {

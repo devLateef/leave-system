@@ -4,6 +4,17 @@
 <div id="app">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        .modal {
+            z-index: 1050; /* Ensure this is higher than other elements */
+            visibility: visible; /* Ensure the modal is visible */
+        }
+        @media (max-width: 600px) {
+            .modal {
+                width: 90%;
+            }
+        }
+    </style>
     <div class="main-wrapper">
         <div class="navbar-bg"></div>
         <div class="main-sidebar sidebar-style-2">
@@ -169,7 +180,7 @@
                                         <button type="button"
                                             class="btn btn-primary bg-danger mt-2 col-lg-2 col-md-5 col-12"
                                             data-bs-toggle="modal"
-                                            data-bs-target="#declineModal">Decline Request</button>
+                                            data-bs-target="#declineModal" id="decline_btn">Decline Request</button>
                                     </div>
                                     @endif
                                 </div>
@@ -549,6 +560,24 @@
     </div>
 </div>
 <script>
+    document.getElementById('approve_btn').addEventListener('click', function(event) {
+    event.stopPropagation();
+    showModal();
+    });
+    document.getElementById('defer_btn').addEventListener('click', function(event) {
+    event.stopPropagation();
+    showModal();
+    });
+    document.getElementById('decline_btn').addEventListener('click', function(event) {
+    event.stopPropagation();
+    showModal();
+    });
+    function showModal() {
+        document.getElementById('approve_btn').style.display = 'block';
+        document.getElementById('defer_btn').style.display = 'block';
+        document.getElementById('decline_btn').style.display = 'block';
+    }
+
     function disableWeekends(date) {
         var day = date.getDay();
         return (day !== 0 && day !== 6); // Sunday = 0, Saturday = 6
