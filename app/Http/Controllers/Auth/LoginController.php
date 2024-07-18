@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
@@ -46,7 +46,10 @@ class LoginController extends Controller
      */
     public function username()
     {
-        return 'staff_id';
+        $login = request()->input('login');
+        $fieldType = filter_var($login, FILTER_VALIDATE_EMAIL) ? 'email' : 'staff_id';
+        request()->merge([$fieldType => $login]);
+        return $fieldType;
     }
     /**
      * Validate the user login request.
@@ -57,9 +60,23 @@ class LoginController extends Controller
     protected function validateLogin(Request $request)
     {
         $request->validate([
-            'staff_id' => 'required|string',
+            'login' => 'required|string',
             'password' => 'required|string|min:8',
         ]);
+    }
+        /**
+     * Attempt to log the user into the application.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return bool
+     */
+    protected function attemptLogin(Request $request)
+    {
+        $fieldType = $this->username();
+        return Auth::attempt(
+            [$fieldType => $request->input('login'), 'password' => $request->input('password')],
+            $request->filled('remember')
+        );
     }
 
     /**
@@ -85,9 +102,9 @@ class LoginController extends Controller
     protected function sendFailedLoginResponse(Request $request)
     {
         return redirect()->back()
-            ->withInput($request->only($this->username(), 'remember'))
+            ->withInput($request->only('login', 'remember'))
             ->withErrors([
-                $this->username() => trans('auth.failed'),
+                'login' => trans('auth.failed'),
                 'password' => 'The provided password is incorrect.',
             ]);
     }

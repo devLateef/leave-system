@@ -84,9 +84,9 @@
                             <form method="POST" action="{{route('login')}}" class="needs-validation" novalidate="">
                                 @csrf
                                 <div class="form-group">
-                                    <label for="staff_id">Staff ID</label>
-                                    <input id="staff_id" type="text" class="form-control @error('staff_id') is-invalid @enderror" name="staff_id"
-                                        tabindex="1" required autofocus>
+                                    <label for="login">Email or Staff ID</label>
+                                    <input id="login" type="text" class="form-control @error('login') is-invalid @enderror" name="login"
+                                       value="{{old('login')}}" tabindex="1" required autofocus>
                                     @error('staff_id')
                                     <div class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -115,7 +115,7 @@
                                 <div class="form-group">
                                     <div class="custom-control custom-checkbox">
                                         <input type="checkbox" name="remember"
-                                            class="custom-control-input" tabindex="3" id="remember-me">
+                                            class="custom-control-input" tabindex="3" id="remember-me" {{ old('remember') ? 'checked' : '' }}>
                                         <label class="custom-control-label" for="remember-me">Remember
                                             Me</label>
                                     </div>
