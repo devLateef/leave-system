@@ -9,6 +9,9 @@
             .print-btn, .navbar-bg, .back, .main-sidebar, .section-header-breadcrumb {
                 display: none;
             }
+            #print-btn {
+                display: none
+            }
             .section-header, .section-body, .card-body {
                 margin: 0;
                 padding: 0;
@@ -51,7 +54,7 @@
                                                 <h4>Approval Confirmation Details</h4>
                                             </div>
                                             <div>
-                                                <button class="btn btn-primary print-btn" onclick="window.print()">Print Approval Note</button>
+                                                <button id="print-btn" class="btn btn-primary print-btn" onclick="window.print()">Print Approval Note</button>
                                             </div>
                                         </div>
                                         <hr/>

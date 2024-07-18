@@ -52,6 +52,10 @@
                                     </div>
                                     <div class="row">
                                         <div class="form-group col-md-4 col-12">
+                                            <dd> Email</dd>
+                                            <dl>{{$user->email}}</dl>
+                                        </div>
+                                        <div class="form-group col-md-4 col-12">
                                             <dd>Date of Birth</dd>
                                             <dl>{{$user->dob}}</dl>
                                         </div>
@@ -59,12 +63,12 @@
                                             <dd>Phone</dd>
                                             <dl>{{$user->phone}}</dl>
                                         </div>
+                                    </div>
+                                    <div class="row">
                                         <div class="form-group col-md-4 col-12">
                                             <dd>Department</dd>
                                             <dl>{{$user->department}}</dl>
                                         </div>
-                                    </div>
-                                    <div class="row">
                                         <div class="form-group col-md-4 col-12">
                                             <dd>Gender</dd>
                                             <dl>{{$user->gender}}</dl>
@@ -73,15 +77,11 @@
                                             <dd>State of Origin</dd>
                                             <dl>{{$user->state_of_origin}}</dl>
                                         </div>
-                                        <div class="form-group col-md-4 col-12">
-                                            <dd>Employee Type</dd>
-                                            <dl>{{$user->employee_type}}</dl>
-                                        </div>
                                     </div>
                                     <div class="row">
                                         <div class="form-group col-md-4 col-12">
-                                            <dd> Leave Balance</dd>
-                                            <dl>{{$user->leave_balance}}</dl>
+                                            <dd>Employee Type</dd>
+                                            <dl>{{$user->employee_type}}</dl>
                                         </div>
                                         <div class="form-group col-md-4 col-12">
                                             <dd>Is Academic Staff?</dd>
@@ -97,7 +97,11 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="form-group col-md-12 col-12">
+                                        <div class="form-group col-md-4 col-12">
+                                            <dd> Leave Balance</dd>
+                                            <dl>{{$user->leave_balance}}</dl>
+                                        </div>
+                                        <div class="form-group col-md-4 col-12">
                                             <dd>Address</dd>
                                             <dl>{{$user->address}}</dl>
                                         </div>
