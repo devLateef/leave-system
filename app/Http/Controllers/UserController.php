@@ -113,7 +113,6 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $messages = [
-            'staff_id.regex' => 'The staff ID is not Valid.',
             'email.unique' => 'The email has already been taken.',
             'staff_id.unique' => 'The staff ID has already been taken.',
         ];
@@ -122,13 +121,6 @@ class UserController extends Controller
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
-            'staff_id' => [
-                'required', 
-                'string', 
-                'max:20', 
-                'unique:users,staff_id,' 
-                . $user->id, 
-                'regex:/^CUA/'],
         ], $messages);
 
         $user->first_name = $request->first_name;
