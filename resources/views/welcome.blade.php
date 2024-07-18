@@ -42,7 +42,7 @@
             @if (Route::has('login'))
             <div class="carousel-container">
               <div class="carousel-content">
-                <h2 class="animate__animated animate__fadeInDown text-info">Employee <br> Leave Management System <br> For HR</h2>
+                <h2 class="animate__animated animate__fadeInDown text-info">Employee E-Leave Management System: <br> A Case Study of <br> Crescent University Abeokuta</h2>
                 <p class="animate__animated animate__fadeInUp">Effortless leave management, empowered productivity.</p>
                 @auth
                     <a href="{{ url('/home') }}" class="btn-get-started animate__animated animate__fadeInUp scrollto">Get Started</a>
@@ -59,7 +59,7 @@
           <div class="carousel-item" style="background-image: url(assets/img/slide/slide-2.jpg);">
             <div class="carousel-container">
               <div class="carousel-content">
-                <h2 class="animate__animated animate__fadeInDown text-info">LMS</h2>
+                <h2 class="animate__animated animate__fadeInDown text-info">Employee E-LMS:<br> A Case Study of Crescent University<br> Abeokuta</h2>
                 <p class="animate__animated animate__fadeInUp">Empowering your team with seamless leave management, one day at a time.</p>
                 <a href="{{ route('login') }}" class="btn-get-started animate__animated animate__fadeInUp scrollto">Get Started</a>
               </div>

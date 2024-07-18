@@ -60,23 +60,10 @@ class CommentController extends Controller
         ->where('leave_id', $request->leave_id)->first();
 
         if ($existing_comment) {
-            $total_days_requested = $existing_comment->leave->total_days_requested;
-            $leaveOwner = User::find($existing_comment->leave->user_id);
-            $leaveOwner->leave_balance += $total_days_requested;
-            $leaveOwner->save();
             $existing_comment->start_date = $request->start_date;
             $existing_comment->end_date = $request->end_date;
             $existing_comment->message = $request->message;
-            // Get the user who applied for the leave
-            $appliedUser = User::find($existing_comment->leave->user_id);
-            if(isset($existing_comment->days_given)){
-                // Add the previous days given back to the user's leave balance
-                $appliedUser->leave_balance += $existing_comment->days_given;
-                $appliedUser->save();
-                $existing_comment->days_given = $totalDaysGiven;
-            }else{
-                $existing_comment->days_given = $totalDaysGiven;
-            }
+            $existing_comment->days_given = $totalDaysGiven;
             $existing_comment->save();
         }else{
             $new_comment = new Comment();
@@ -245,6 +232,10 @@ class CommentController extends Controller
             $new_comment->leave_id = $request->leave_id;
             $new_comment->user_id = Auth::user()->id;
             $new_comment->save();
+            $total_days_requested = $new_comment->leave->total_days_requested;
+            $leaveOwner = User::find($new_comment->leave->user_id);
+            $leaveOwner->leave_balance += $total_days_requested;
+            $leaveOwner->save();
         }
 
         // Retrieving the associated leave and updating its status

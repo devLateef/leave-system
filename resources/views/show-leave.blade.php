@@ -98,6 +98,9 @@
                                                         <dd class="mt-2"><em>{{$leave->hod_approval}} Start Date:</em> <br> <b>{{$hodComment->start_date}}</b></dd>
                                                         <dd><em>{{$leave->hod_approval}} End Date:</em> <br> <b>{{$hodComment->end_date}}</b></dd>
                                                         <dd><em>Comment:</em> <br> <b>{{$hodComment->message}}</b></dd>
+                                                            @if($leave->hod_approval == 'Approved')
+                                                            <dd><em>Approved Days:</em> <br> <b>{{$hodComment->days_given}}</b></dd>
+                                                            @endif
                                                         @endif
                                                     @endif
                                                 </div>
@@ -132,6 +135,9 @@
                                                         <dd class="mt-2"><em>{{$leave->final_approval}} Start Date:</em> <br> <b>{{$adminComment->start_date}}</b></dd>
                                                         <dd><em>{{$leave->final_approval}} End Date:</em> <br> <b>{{$adminComment->end_date}}</b></dd>
                                                         <dd><em>Comment:</em> <br> <b>{{$adminComment->message}}</b></dd>
+                                                            @if($leave->final_approval == 'Approved')
+                                                            <dd><em>Approved Days:</em> <br> <b>{{$adminComment->days_given}}</b></dd>
+                                                            @endif
                                                         @endif
                                                     @endif
                                                 </div>
