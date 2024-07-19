@@ -57,6 +57,9 @@ Route::prefix('leaves')->middleware('auth')->group(function () {
     Route::get('/apply', [LeaveController::class, 'create'])->name('leaves.apply');
     Route::post('/store', [LeaveController::class, 'store'])->name('leaves.store');
     Route::get('/show/{leave}', [LeaveController::class, 'show'])->name('leaves.show');
+    Route::get('/show/approve/{leave}', [LeaveController::class, 'showApprove'])->name('leaves.show-approve');
+    Route::get('/show/defer/{leave}', [LeaveController::class, 'showDefer'])->name('leaves.show-defer');
+    Route::get('/show/decline/{leave}', [LeaveController::class, 'showDecline'])->name('leaves.show-decline');
     Route::get('/show/{leave}/approval', [LeaveController::class, 'approvalNote'])->name('leaves.approval');
     Route::get('/active', [LeaveController::class, 'approved'])->name('leaves.active');
     Route::get('/data', [LeaveController::class, 'getLeaveApplications'])->name('leaves.data');

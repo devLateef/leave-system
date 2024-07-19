@@ -39,7 +39,7 @@ class LeaveController extends Controller
         $hod = User::where('department', $user->department)->where('role_id', 2)->first();
         $superAdmin = User::where('role_id', 4)->first();
         $admin = User::where('role_id', 3)->first();
-        $recipients = [$superAdmin->email, $admin->email];
+        $recipients = [$superAdmin->email, $admin->email, $hod->email];
         $leave_balance = $user->leave_balance;
         $request->validate([
             'start_date' => ['required', 'date', function($attribute, $value, $fail) {
@@ -131,6 +131,51 @@ class LeaveController extends Controller
         return view('show-leave', compact('leave'));
     }
 
+    public function showApprove(Leave $leave){
+        $user = Auth::user();
+        if($user->role_id == config('roles.ADMIN') || $user->role_id == config('roles.SUPER_ADMIN'))
+        {
+            $this->authorize('viewAny', Leave::class);
+        }elseif ($user->role_id == config('roles.HOD')) {
+            $leave_applications = Leave::whereHas('user', function($query) use ($user) {
+                $query->where('department', $user->department);
+            })->get();
+        }else{
+            $this->authorize('view', $leave);
+        }
+        return view('approve-form', compact('leave'));
+    }
+
+    public function showDefer(Leave $leave){
+        $user = Auth::user();
+        if($user->role_id == config('roles.ADMIN') || $user->role_id == config('roles.SUPER_ADMIN'))
+        {
+            $this->authorize('viewAny', Leave::class);
+        }elseif ($user->role_id == config('roles.HOD')) {
+            $leave_applications = Leave::whereHas('user', function($query) use ($user) {
+                $query->where('department', $user->department);
+            })->get();
+        }else{
+            $this->authorize('view', $leave);
+        }
+        return view('defer-form', compact('leave'));
+    }
+
+    public function showDecline(Leave $leave){
+        $user = Auth::user();
+        if($user->role_id == config('roles.ADMIN') || $user->role_id == config('roles.SUPER_ADMIN'))
+        {
+            $this->authorize('viewAny', Leave::class);
+        }elseif ($user->role_id == config('roles.HOD')) {
+            $leave_applications = Leave::whereHas('user', function($query) use ($user) {
+                $query->where('department', $user->department);
+            })->get();
+        }else{
+            $this->authorize('view', $leave);
+        }
+        return view('decline-form', compact('leave'));
+    }
+
     /**
      * Show the form for editing the specified resource.
      */
@@ -148,7 +193,7 @@ class LeaveController extends Controller
         $hod = User::where('department', $user->department)->where('role_id', 2)->first();
         $superAdmin = User::where('role_id', 4)->first();
         $admin = User::where('role_id', 3)->first();
-        $recipients = [$superAdmin->email, $admin->email];
+        $recipients = [$superAdmin->email, $admin->email, $hod->email];
         $leave_balance = $user->leave_balance;
 
         $request->validate([
