@@ -4,7 +4,7 @@
 @section('content')
 <section class="section">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
     <div class="container">
         <div class="row">
             <div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-8 offset-lg-2 col-xl-8 offset-xl-2">
@@ -15,6 +15,16 @@
                     </div>
 
                     <div class="card-body">
+                        @if ($errors->any())
+                        <div class="text-white alert alert-danger alert-dismissible fade show" role="alert">
+                            @foreach ($errors->all() as $error)
+                                <div>{{ $error }}</div>
+                            @endforeach
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        @endif
                         @if (session('message'))
                             <div class="alert alert-danger alert-dismissible fade show" role="alert">
                                 {{ session('message') }}

@@ -81,7 +81,7 @@
                                             </div>
                                             <div class="form-group col-md-4 col-12">
                                                 <dt>HOD Approval</dt>
-                                                <dd class="fw-bold text-white text-center {{$leave->hod_approval == 'Approved' ? 'bg-success w-25 p-1 rounded' : ($leave->hod_approval == 'Defered' ? 'bg-info w-25 p-1 rounded' : ($leave->hod_approval == 'Pending' ? 'bg-warning w-25 p-1 rounded' : 'bg-danger w-25 p-1 rounded'))}}">{{$leave->hod_approval}}</dd>
+                                                <dd class="fw-bold text-white text-center w-50 {{$leave->hod_approval == 'Approved' ? 'bg-success p-1 rounded' : ($leave->hod_approval == 'Defered' ? 'bg-info p-1 rounded' : ($leave->hod_approval == 'Pending' ? 'bg-warning p-1 rounded' : 'bg-danger p-1 rounded'))}}">{{$leave->hod_approval}}</dd>
                                                 <div class="mt-4">
                                                     @php
                                                         $hodComment = null;
@@ -118,7 +118,7 @@
                                             </div>
                                             <div class="form-group col-md-4 col-12">
                                                 <dt>Final Approval</dt>
-                                                <dd class="fw-bold text-center text-white {{$leave->final_approval == 'Approved' ? 'bg-success w-25 p-1 rounded' : ($leave->final_approval == 'Defered' ? 'bg-info w-25 p-1 rounded' : ($leave->final_approval == 'Pending' ? 'bg-warning w-25 p-1 rounded' : 'bg-danger w-25 p-1 rounded'))}}">{{$leave->final_approval}}</dd>
+                                                <dd class="fw-bold text-center text-white w-50  {{$leave->final_approval == 'Approved' ? 'bg-success p-1 rounded' : ($leave->final_approval == 'Defered' ? 'bg-info p-1 rounded' : ($leave->final_approval == 'Pending' ? 'bg-warning p-1 rounded' : 'bg-danger p-1 rounded'))}}">{{$leave->final_approval}}</dd>
                                                 <div class="mt-4">
                                                     @php
                                                         $adminComment = null;

@@ -8,7 +8,9 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Ozdemir\Datatables\Datatables;
 use Ozdemir\Datatables\DB\LaravelAdapter;
 
@@ -196,21 +198,34 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-     // Find all leaves associated with the user
-        $leaves = Leave::where('user_id', $user->id)->get();
-
-        foreach ($leaves as $leave) {
-            // Delete comments associated with each leave
-            $leave->comments()->delete();
-        }
-    
-        // Delete all leaves associated with the user
-        Leave::where('user_id', $user->id)->delete();
-    
-        // Now delete the user
-        $user->delete();
-    
-        return redirect(route('home'))->with('success', 'User Deleted Successfully');
+        try {
+            DB::beginTransaction();
+        
+            // Find all leaves associated with the user
+            $leaves = Leave::where('user_id', $user->id)->get();
+        
+            foreach ($leaves as $leave) {
+                // Delete comments associated with each leave
+                $leave->comments()->delete();
+            }
+        
+            // Delete all leaves associated with the user
+            Leave::where('user_id', $user->id)->delete();
+        
+            // Now delete the user
+            $user->delete();
+        
+            DB::commit();
+        
+            return redirect(route('home'))->with('success', 'User Deleted Successfully');
+        } catch (\Exception $e) {
+            DB::rollback();
+            
+            // Log the error
+            Log::error('An error occurred while deleting user with ID ' . $user->id, ['exception' => $e]);
+        
+            return redirect(route('home'))->with('error', 'An error occurred while deleting the user.');
+        };
     }
 
     public function createpass(){

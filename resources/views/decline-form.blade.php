@@ -1,39 +1,26 @@
 @extends('layouts.app')
 @section('content')
-    {{-- <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">State
-                    Reason for Declining</h5>
-                <button type="button" class="btn-close" onclick="history.back(); return false;"></button>
-            </div>
-            <div class="modal-body">
-
-                <form method="POST" action="{{route('comments.decline')}}">
-                    @csrf
-                    <input type="number" class="form-control d-none" id="leave_id" value="{{$leave->id}}" name="leave_id">
-                    <div class="mb-3">
-                        <label for="message-text" class="col-form-label">Reason:</label>
-                        <textarea class="form-control" id="message-text" name="message"></textarea>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary bg-danger"
-                            onclick="history.back(); return false;">Close</button>
-                        <button type="submit" class="btn btn-primary">Okay</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div> --}}
     <div class="container mt-5">
         <div class="row">
             <div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-8 offset-lg-2 col-xl-8 offset-xl-2">
                 <div class="card card-primary mt-4">
                     <div class="card-header d-flex justify-content-between">
                         <h4>State Reason for Declining this Request!</h4>
-                        <button type="button" class="btn-close" onclick="history.back(); return false;"></button>
+                        <a href="{{route('leaves.show', $leave->id)}}">
+                            <button type="button" class="btn-close"></button>
+                        </a>
                     </div>
                     <div class="card-body">
+                        @if ($errors->any())
+                        <div class="text-white alert alert-danger alert-dismissible fade show" role="alert">
+                            @foreach ($errors->all() as $error)
+                                <div>{{ $error }}</div>
+                            @endforeach
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        @endif
                         <div class="row ml-1">
                             <div class="form-group col-md-6 col-12">
                                 <dt>Expected Start Date</dt>
@@ -142,10 +129,10 @@
                             </div>
                             <div class="form-group d-flex justify-content-between">
                                 <button type="submit" class="btn btn-primary btn-lg btn-inline-block">
-                                    Approve Now
+                                    Decline Now
                                 </button>
                                 <button  class="btn btn-danger btn-lg btn-inline-block" onclick="history.back(); return false;">
-                                    Close
+                                    Go Back
                                 </button>
                             </div>
                         </form>
