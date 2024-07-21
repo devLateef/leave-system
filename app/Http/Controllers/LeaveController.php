@@ -26,8 +26,9 @@ class LeaveController extends Controller
      */
     public function create()
     {
+        $user = Auth::user();
         $this->authorize('create', Leave::class);
-        return view('apply');
+        return view('apply', compact('user'));
     }
 
     /**

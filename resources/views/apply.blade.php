@@ -10,8 +10,10 @@
             <div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-8 offset-lg-2 col-xl-8 offset-xl-2">
 
                 <div class="card card-primary mt-4">
-                    <div class="card-header">
+                    <div class="card-header d-flex justify-content-between">
                         <h4>Apply for Leave</h4>
+                        <h6 class="text-primary">Remaining Leaves (in days):- &nbsp <b class="text-black display-6 font-weight-bold">{{$user->leave_balance}}</b>
+                        </h6>
                     </div>
 
                     <div class="card-body">
