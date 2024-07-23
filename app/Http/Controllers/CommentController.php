@@ -310,7 +310,6 @@ class CommentController extends Controller
         $leave = Leave::find($request->leave_id);
         $leaveOwner = User::find($leave->user_id);
         $recipient = [$leaveOwner->email];
-        // $leave = $new_comment->leave;
         if($leave){
             if($user->role_id == env('HOD')){
                 $leave->hod_approval = 'Declined';

@@ -30,7 +30,7 @@ class UserFactory extends Factory
                 'last_name' => config('admin.LAST_NAME'),
                 'staff_id' => config('admin.STAFFID'),
                 'department' => config('admin.DEPARTMENT'),
-                'role_id' => env('ADMIN'),
+                // 'role_id' => env('ADMIN'),
                 // 'email' => fake()->unique()->safeEmail(),
                 'email' => config('admin.EMAIL'),
                 'phone' => config('admin.PHONE'),

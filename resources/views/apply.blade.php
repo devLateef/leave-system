@@ -58,12 +58,12 @@
                             </div>
                             <div class="row">
                                 <div class="form-group col-6">
-                                    <label for="start_date">Expected Start Date</label>
+                                    <label for="start_date">Date to Proceed on Leave</label>
                                     <input id="start_date" type="date" class="form-control"
                                         name="start_date" required>
                                 </div>
                                 <div class="form-group col-6">
-                                    <label for="end_date" class="d-block">Expected End Date</label>
+                                    <label for="end_date" class="d-block">Date to Resume from Leave</label>
                                     <input id="end_date" type="date" class="form-control"
                                         name="end_date" required>
                                 </div>

@@ -79,7 +79,7 @@ class LeaveController extends Controller
 
             'designation' => 'required|string',
             'standin_staff' => 'required|string',
-            'comment' => 'required|string'
+            'comment' => 'required|string|min:10'
         ]);
 
          // Calculate total days requested
@@ -256,7 +256,7 @@ class LeaveController extends Controller
 
             'designation' => 'required|string',
             'standin_staff' => 'required|string',
-            'comment' => 'required|string'
+            'comment' => 'required|string|min:10'
         ]);
 
         // Calculate total days requested

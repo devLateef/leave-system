@@ -6,7 +6,6 @@ return [
     'STAFFID' => env('SUPER_STAFFID'),
     'DEPARTMENT' => env('SUPER_DEPARTMENT'),
     'EMAIL' => env('SUPER_EMAIL'),
-    'DOB' => env('SUPER_DOB'),
     'STATE_OF_ORIGIN' => env('SUPER_STATE_OF_ORIGIN'),
     'EMPLOYEE_TYPE' => env('SUPER_EMPLOYEE_TYPE'),
     'ADDRESS' => env('SUPER_ADDRESS'),
