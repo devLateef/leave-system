@@ -35,10 +35,42 @@ class CommentController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'start_date' => 'required|date',
-            'end_date' => 'required|date',
+            'start_date' => ['required', 'date', function($attribute, $value, $fail) use ($request) {
+                $date = Carbon::parse($value);
+                $dayOfWeek = $date->dayOfWeek;
+                $userLeave = Leave::find($request->leave_id);
+                $userStartDate = Carbon::parse($userLeave->start_date);
+        
+                if ($dayOfWeek == Carbon::SUNDAY || $dayOfWeek == Carbon::SATURDAY) {
+                    $fail('The start date cannot be a weekend.');
+                }
+        
+                if ($date->isBefore(Carbon::today())) {
+                    $fail('The start date cannot be in the past.');
+                }
+                if($date->isBefore($userStartDate)){
+                    $fail('The start date cannot be behind the user choosen start date');
+                }
+            }],
+            'end_date' => ['required', 'date', function($attribute, $value, $fail) use ($request) {
+                $date = Carbon::parse($value);
+                $dayOfWeek = $date->dayOfWeek;
+                $startDate = Carbon::parse($request->start_date);
+        
+                if ($dayOfWeek == Carbon::SUNDAY || $dayOfWeek == Carbon::SATURDAY) {
+                    $fail('The end date cannot be a weekend.');
+                }
+        
+                if ($date->isBefore(Carbon::today())) {
+                    $fail('The end date cannot be in the past.');
+                }
+        
+                if ($date->isBefore($startDate)) {
+                    $fail('The end date cannot be before the start date.');
+                }
+            }],
+            'message' => 'required|string|min:10',
         ]);
-
         $user = Auth::user();
         // Calculate total days requested
         $startDate = Carbon::parse($request->start_date);
@@ -147,8 +179,41 @@ class CommentController extends Controller
 
     public function storeDefer(Request $request){
         $request->validate([
-            'start_date' => 'required|date',
-            'end_date' => 'required|date',
+            'start_date' => ['required', 'date', function($attribute, $value, $fail) use ($request) {
+                $date = Carbon::parse($value);
+                $dayOfWeek = $date->dayOfWeek;
+                $userLeave = Leave::find($request->leave_id);
+                $userStartDate = Carbon::parse($userLeave->start_date);
+        
+                if ($dayOfWeek == Carbon::SUNDAY || $dayOfWeek == Carbon::SATURDAY) {
+                    $fail('The start date cannot be a weekend.');
+                }
+        
+                if ($date->isBefore(Carbon::today())) {
+                    $fail('The start date cannot be in the past.');
+                }
+                if($date->isBefore($userStartDate)){
+                    $fail('The start date cannot be behind the user choosen start date');
+                }
+            }],
+            'end_date' => ['required', 'date', function($attribute, $value, $fail) use ($request) {
+                $date = Carbon::parse($value);
+                $dayOfWeek = $date->dayOfWeek;
+                $startDate = Carbon::parse($request->start_date);
+        
+                if ($dayOfWeek == Carbon::SUNDAY || $dayOfWeek == Carbon::SATURDAY) {
+                    $fail('The end date cannot be a weekend.');
+                }
+        
+                if ($date->isBefore(Carbon::today())) {
+                    $fail('The end date cannot be in the past.');
+                }
+        
+                if ($date->isBefore($startDate)) {
+                    $fail('The end date cannot be before the start date.');
+                }
+            }],
+            'message' => 'required|string|min:10',
         ]);
 
         $user = Auth::user();
@@ -219,6 +284,9 @@ class CommentController extends Controller
     }
 
     public function storeDecline(Request $request){
+        $request->validate([
+            'message' => 'required|string|min:10',
+        ]);
         $user = Auth::user();
         $existing_comment = Comment::where('user_id', $user->id)
         ->where('leave_id', $request->leave_id)->first();

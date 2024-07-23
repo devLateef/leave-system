@@ -26,8 +26,9 @@ class LeaveController extends Controller
      */
     public function create()
     {
+        $user = Auth::user();
         $this->authorize('create', Leave::class);
-        return view('apply');
+        return view('apply', compact('user'));
     }
 
     /**
@@ -39,21 +40,43 @@ class LeaveController extends Controller
         $hod = User::where('department', $user->department)->where('role_id', 2)->first();
         $superAdmin = User::where('role_id', 4)->first();
         $admin = User::where('role_id', 3)->first();
-        $recipients = [$superAdmin->email, $admin->email];
+        if($admin && $hod){
+            $recipients = [$superAdmin->email, $admin->email, $hod->email];
+        }else{
+            $recipients = [$superAdmin];
+        }
         $leave_balance = $user->leave_balance;
         $request->validate([
             'start_date' => ['required', 'date', function($attribute, $value, $fail) {
-                $dayOfWeek = SupportCarbon::parse($value)->dayOfWeek;
+                $date = SupportCarbon::parse($value);
+                $dayOfWeek = $date->dayOfWeek;
+        
                 if ($dayOfWeek == SupportCarbon::SUNDAY || $dayOfWeek == SupportCarbon::SATURDAY) {
                     $fail('The start date cannot be a weekend.');
                 }
+        
+                if ($date->isBefore(SupportCarbon::today())) {
+                    $fail('The start date cannot be in the past.');
+                }
             }],
-            'end_date' => ['required', 'date', function($attribute, $value, $fail) {
-                $dayOfWeek = SupportCarbon::parse($value)->dayOfWeek;
+            'end_date' => ['required', 'date', function($attribute, $value, $fail) use ($request) {
+                $date = SupportCarbon::parse($value);
+                $dayOfWeek = $date->dayOfWeek;
+                $startDate = SupportCarbon::parse($request->start_date);
+        
                 if ($dayOfWeek == SupportCarbon::SUNDAY || $dayOfWeek == SupportCarbon::SATURDAY) {
                     $fail('The end date cannot be a weekend.');
                 }
+        
+                if ($date->isBefore(SupportCarbon::today())) {
+                    $fail('The end date cannot be in the past.');
+                }
+        
+                if ($date->isBefore($startDate)) {
+                    $fail('The end date cannot be before the start date.');
+                }
             }],
+
             'designation' => 'required|string',
             'standin_staff' => 'required|string',
             'comment' => 'required|string'
@@ -131,6 +154,51 @@ class LeaveController extends Controller
         return view('show-leave', compact('leave'));
     }
 
+    public function showApprove(Leave $leave){
+        $user = Auth::user();
+        if($user->role_id == config('roles.ADMIN') || $user->role_id == config('roles.SUPER_ADMIN'))
+        {
+            $this->authorize('viewAny', Leave::class);
+        }elseif ($user->role_id == config('roles.HOD')) {
+            $leave_applications = Leave::whereHas('user', function($query) use ($user) {
+                $query->where('department', $user->department);
+            })->get();
+        }else{
+            $this->authorize('view', $leave);
+        }
+        return view('approve-form', compact('leave'));
+    }
+
+    public function showDefer(Leave $leave){
+        $user = Auth::user();
+        if($user->role_id == config('roles.ADMIN') || $user->role_id == config('roles.SUPER_ADMIN'))
+        {
+            $this->authorize('viewAny', Leave::class);
+        }elseif ($user->role_id == config('roles.HOD')) {
+            $leave_applications = Leave::whereHas('user', function($query) use ($user) {
+                $query->where('department', $user->department);
+            })->get();
+        }else{
+            $this->authorize('view', $leave);
+        }
+        return view('defer-form', compact('leave'));
+    }
+
+    public function showDecline(Leave $leave){
+        $user = Auth::user();
+        if($user->role_id == config('roles.ADMIN') || $user->role_id == config('roles.SUPER_ADMIN'))
+        {
+            $this->authorize('viewAny', Leave::class);
+        }elseif ($user->role_id == config('roles.HOD')) {
+            $leave_applications = Leave::whereHas('user', function($query) use ($user) {
+                $query->where('department', $user->department);
+            })->get();
+        }else{
+            $this->authorize('view', $leave);
+        }
+        return view('decline-form', compact('leave'));
+    }
+
     /**
      * Show the form for editing the specified resource.
      */
@@ -148,22 +216,44 @@ class LeaveController extends Controller
         $hod = User::where('department', $user->department)->where('role_id', 2)->first();
         $superAdmin = User::where('role_id', 4)->first();
         $admin = User::where('role_id', 3)->first();
-        $recipients = [$superAdmin->email, $admin->email];
+        if($admin && $hod){
+            $recipients = [$superAdmin->email, $admin->email, $hod->email];
+        }else{
+            $recipients = [$superAdmin];
+        }
         $leave_balance = $user->leave_balance;
 
         $request->validate([
             'start_date' => ['required', 'date', function($attribute, $value, $fail) {
-                $dayOfWeek = SupportCarbon::parse($value)->dayOfWeek;
+                $date = SupportCarbon::parse($value);
+                $dayOfWeek = $date->dayOfWeek;
+        
                 if ($dayOfWeek == SupportCarbon::SUNDAY || $dayOfWeek == SupportCarbon::SATURDAY) {
                     $fail('The start date cannot be a weekend.');
                 }
+        
+                if ($date->isBefore(SupportCarbon::today())) {
+                    $fail('The start date cannot be in the past.');
+                }
             }],
-            'end_date' => ['required', 'date', function($attribute, $value, $fail) {
-                $dayOfWeek = SupportCarbon::parse($value)->dayOfWeek;
+            'end_date' => ['required', 'date', function($attribute, $value, $fail) use ($request) {
+                $date = SupportCarbon::parse($value);
+                $dayOfWeek = $date->dayOfWeek;
+                $startDate = SupportCarbon::parse($request->start_date);
+        
                 if ($dayOfWeek == SupportCarbon::SUNDAY || $dayOfWeek == SupportCarbon::SATURDAY) {
                     $fail('The end date cannot be a weekend.');
                 }
+        
+                if ($date->isBefore(SupportCarbon::today())) {
+                    $fail('The end date cannot be in the past.');
+                }
+        
+                if ($date->isBefore($startDate)) {
+                    $fail('The end date cannot be before the start date.');
+                }
             }],
+
             'designation' => 'required|string',
             'standin_staff' => 'required|string',
             'comment' => 'required|string'
